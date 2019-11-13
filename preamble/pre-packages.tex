@@ -25,7 +25,7 @@
 % Empfohlen latin1, da einige Pakete mit utf8 Zeichen nicht
 % funktionieren, z.B: listings, soul.
 
-% \usepackage[latin1]{inputenx} % ISO-8859-1
+\usepackage[latin1]{inputenx} % ISO-8859-1
 %\usepackage[ansinew]{inputenx} % Windows-Standard (CP1252) (baut auf ISO 8859-1 und ISO 8859-15 auf)
 %\usepackage[utf8]{inputenc}
 
@@ -87,9 +87,9 @@
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 \usepackage[fixamsmath,disallowspaces]{mathtools} % Erweitert amsmath und behebt einige Bugs
-% \usepackage{fixmath}
-% \usepackage[all,warning]{onlyamsmath} % Warnt bei Benutzung von Befehlen die mit amsmath inkompatibel sind.
-% \usepackage{icomma} % Erlaubt die Benutzung von Kommas im Mathematikmodus
+\usepackage{fixmath}
+\usepackage[all,warning]{onlyamsmath} % Warnt bei Benutzung von Befehlen die mit amsmath inkompatibel sind.
+\usepackage{icomma} % Erlaubt die Benutzung von Kommas im Mathematikmodus
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % 4. Symbole
@@ -104,20 +104,20 @@
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 \usepackage{url} % Setzen von URLs. In Verbindung mit hyperref sind diese auch aktive Links.
-% \usepackage[stable,perpage, ragged,  multiple]{footmisc} % Fussnoten
+\usepackage[stable,perpage, ragged,  multiple]{footmisc} % Fussnoten
 \usepackage[ngerman]{varioref} % Intelligente Querverweise
-% \usepackage{enumitem} % Listen
+\usepackage{enumitem} % Listen
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % 6. Pakete zum Zitieren
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-% \usepackage[babel, german=quotes, english=british, french=guillemets]{csquotes} % clever quotations
-% \SetBlockThreshold{2} % Anzahl von Zeilen
-% \newenvironment{myquote}%
-%           {\begin{quote}\small}%
-%           {\end{quote}}%
-% \SetBlockEnvironment{myquote}
+\usepackage[babel, german=quotes, english=british, french=guillemets]{csquotes} % clever quotations
+\SetBlockThreshold{2} % Anzahl von Zeilen
+\newenvironment{myquote}%
+          {\begin{quote}\small}%
+          {\end{quote}}%
+\SetBlockEnvironment{myquote}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % 7. PDF related packages
@@ -177,7 +177,7 @@
 
 \usepackage{booktabs}
 \usepackage{tabularx} % tabularx nach hyperref laden
-% \usepackage{multirow}
+\usepackage{multirow}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % 9. figures and placement
@@ -188,9 +188,9 @@
 \usepackage{float}	% Stellt die Option [H] fuer Floats zur Verfgung
 \usepackage{flafter} % Floats immer erst nach der Referenz setzen
 \usepackage{subfig} % Layout wird weiter unten festgelegt !
-% \usepackage{wrapfig} % Bilder von Text Umfliessen lassen
+\usepackage{wrapfig} % Bilder von Text Umfliessen lassen
 
-% \usepackage{placeins} % Alle Floats bis \FloatBarrier ausgeben
+\usepackage{placeins} % Alle Floats bis \FloatBarrier ausgeben
 
 % Make float placement easier
 \renewcommand{\floatpagefraction}{.75} % vorher: .5
@@ -253,7 +253,7 @@ backgroundcolor=\color{lightgray},	  % % Hintergrundfarbe der Listings
 % 11. science packages
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-% \usepackage[squaren]{SIunits}
+\usepackage[squaren]{SIunits}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % 12. layout packages
@@ -278,8 +278,8 @@ backgroundcolor=\color{lightgray},	  % % Hintergrundfarbe der Listings
 %%% Doc: ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/koma-script/scrguide.pdf
 \usepackage[%
    automark,	 % automatische Aktualisierung der Kolumnentitel
-   markcase=ignoreuppercase,	 % Grossbuchstaben verhindern
-]{scrlayer-scrpage}
+   nouppercase,	 % Grossbuchstaben verhindern
+]{scrpage2}
 
 \usepackage{scrtime} % Zeit
 %\usepackage{scrdate} % Datum
@@ -314,8 +314,7 @@ backgroundcolor=\color{lightgray},	  % % Hintergrundfarbe der Listings
 \automark[section]{chapter} % Inhalt von [\rightmark]{\leftmark}
 %
 % Linie zwischen Kopf und Textkörper
-% \headsepline[]{.4pt}
-% \headsepline{.4pt}[\color{black}]
+\setheadsepline{.4pt}[\color{black}]
 
 %% Fussnoten =============================================================
 % Keine hochgestellten Ziffern in der Fussnote (KOMA-Script-spezifisch):
