@@ -6,51 +6,51 @@
 % % ToDo kennzeichnen
 \newcommand{\workTodo}[1]{\textcolor{red}{todo: #1}}
 
-% % F?r Datum und Zeit in Fusszeile
-% % !!!Inhalt bei Fertigstellung der Arbeit l?schen
-\newcommand{\workMarkDateTime}{\workTodo{\today{} - \thistime\ Uhr}}
+% % Für Datum und Zeit in Fusszeile
+% % !!!Inhalt bei Fertigstellung der Arbeit löschen
+\newcommand{\workMarkDateTime}{\today{} - \thistime\ Uhr}
 
 % % Alle Namen werden im Titel und im hyperref-Paket eingetragen
-% % !!! Ueberall f?r <Wert> das Entsprechende eintragen
+% % !!! Ueberall für <Wert> das Entsprechende eintragen
 
  % <Typ> Studienarbeit, Dipolmarbeit, Studienarbeit oder Bachlor-Abschlussarbeit
-\newcommand{\workTyp}{Bachlor-Abschlussarbeit}
+\newcommand{\workTyp}{Bachlor-Abschlussarbeit\xspace}
 
  % <Titel> der Arbeit
-\newcommand{\workTitel}{\workTodo{<Titel>}}
+\newcommand{\workTitel}{Modularising existing functionality of an enterprise monolith system into microservices\xspace}
 
  % <Studiengang> z.B. Kommunikationstechnik
 \newcommand{\workStudiengang}{Informationstechnik}
 
 % <Semester> mit Jahr z.B. Sommersemester 2008
-\newcommand{\workSemester}{\workTodo{<Semester>}\xspace}
+\newcommand{\workSemester}{Wintersemester 2019/20}
 
 % <Name> des Studenten
-\newcommand{\workNameStudent}{\workTodo{<Name>}\xspace}
+\newcommand{\workNameStudent}{Lukas Hermann}
 
-% <Pruefer> Name des pr?fenden (betreuenden) Professor an der Hochschule
-\newcommand{\workPruefer}{\workTodo{<Pruefer>}\xspace}
+% <Pruefer> Name des prüfenden (betreuenden) Professor an der Hochschule
+\newcommand{\workPruefer}{Karin Melzer}
 
 
 % %%% Nur bei Abschluss-Arbeiten
 
-% <Datum> der Abgabe der Arbeit (Eidesstatliche Erkl?ung)
+% <Datum> der Abgabe der Arbeit (Eidesstatliche Erklärung)
 \newcommand{\workDatum}{\today\xspace}
 
-% <Zweitpr?fer>
-\newcommand{\workZweitPruefer}{\workTodo{<Zweitpr?fer>}\xspace}
+% <Zweitprüfer>
+\newcommand{\workZweitPruefer}{Reiner Marchthaler}
 
 % <Zeitraum>
-\newcommand{\workZeitraum}{\workTodo{<Zeitraum>}\xspace}
+\newcommand{\workZeitraum}{9. Oktober 2019 – 9. Februar 2020}
 
 
 % %%% Nur bei Industrie-Arbeiten:
 
 % <Firma>
-\newcommand{\workFirma}{\workTodo{<Firma>}\xspace}
+\newcommand{\workFirma}{Capgemini Service SAS}
 
 % <Betreuer in der Firma>
-\newcommand{\workBetreuer}{\workTodo{<Betreuer in der Firma>}\xspace}
+\newcommand{\workBetreuer}{Robin Kurz}
 
-% Firmenlogo Name hier anpassen, Gr?? (wenn m?glich) nicht ?dern
-\newcommand{\workFirmenLogo}{\includegraphics[width=5cm]{fig/aa-titel/Bosch_4C_S}}
+% Firmenlogo Name hier anpassen, Größe (wenn möglich) nicht ändern
+\newcommand{\workFirmenLogo}{\includegraphics[width=5cm]{fig/aa-titel/capgemini_logo}}
