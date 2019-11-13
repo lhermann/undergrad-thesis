@@ -253,7 +253,7 @@ backgroundcolor=\color{lightgray},	  % % Hintergrundfarbe der Listings
 % 11. science packages
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-\usepackage[squaren]{SIunits}
+% \usepackage[squaren]{SIunits}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % 12. layout packages
@@ -278,8 +278,8 @@ backgroundcolor=\color{lightgray},	  % % Hintergrundfarbe der Listings
 %%% Doc: ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/koma-script/scrguide.pdf
 \usepackage[%
    automark,	 % automatische Aktualisierung der Kolumnentitel
-   nouppercase,	 % Grossbuchstaben verhindern
-]{scrpage2}
+   markcase=ignoreuppercase,	 % Grossbuchstaben verhindern
+]{scrlayer-scrpage}
 
 \usepackage{scrtime} % Zeit
 %\usepackage{scrdate} % Datum
@@ -314,7 +314,7 @@ backgroundcolor=\color{lightgray},	  % % Hintergrundfarbe der Listings
 \automark[section]{chapter} % Inhalt von [\rightmark]{\leftmark}
 %
 % Linie zwischen Kopf und Textkörper
-\setheadsepline{.4pt}[\color{black}]
+% \setheadsepline{.4pt}[\color{black}]
 
 %% Fussnoten =============================================================
 % Keine hochgestellten Ziffern in der Fussnote (KOMA-Script-spezifisch):
@@ -333,7 +333,7 @@ backgroundcolor=\color{lightgray},	  % % Hintergrundfarbe der Listings
 \setkomafont{sectioning}{\SectionFontStyle} %  % Titelzeilen % \bfseries
 
 \setkomafont{pagenumber}{\bfseries\SectionFontStyle} % Seitenzahl
-\setkomafont{pagehead}{\small\sffamily}	       % Kopfzeile
+\setkomafont{pageheadfoot}{\small\sffamily}	       % Kopfzeile
 
 \setkomafont{descriptionlabel}{\itshape}        % Stichwortliste
 %
