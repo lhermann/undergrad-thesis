@@ -36,7 +36,7 @@
 \usepackage{xspace} % Define commands that don't eat spaces.
 \usepackage{ifpdf} % Fuer Pakete/Paketoptionen, die nur fuer pdf benoetigt werden \ifpdf \else \fi
 \usepackage{calc} % Calculation with LaTeX
-\usepackage[ngerman]{babel} % Languagesetting
+\usepackage[english,ngerman]{babel} % Languagesetting
 \usepackage[table]{xcolor} % Farben
 \usepackage[]{graphicx} % Bilder
 %\usepackage{epstopdf} % If an eps image is detected, epstopdf is automatically called to convert it to pdf format.
@@ -163,7 +163,7 @@
    % hypertexnames=false,
    pageanchor=true,         % Pages are linkable
    % PDF Informationen
-   pdftitle={\workTyp: \workTitel},         % Titel
+   pdftitle={\workType: \workTitel},         % Titel
    pdfauthor={\workNameStudent},      % Autor
    pdfcreator={LaTeX, hyperref, KOMA-Script}, % Ersteller
    %pdfproducer={pdfeTeX 1.10b-2.1} %Produzent
@@ -259,6 +259,8 @@ backgroundcolor=\color{lightgray},    % % Hintergrundfarbe der Listings
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % 12. layout packages
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+\usepackage{multicol}
 
 %% Zeilenabstand =========================================================
 %

@@ -7,6 +7,6 @@ pdflatex \
   --c-style-errors \
   --record-package-usages=out/packages.txt \
   --time-statistics \
-  --quiet \
   main.tex
+  # --quiet \
 
