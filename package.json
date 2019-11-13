@@ -1,0 +1,16 @@
+{
+  "name": "thesis",
+  "version": "1.0.0",
+  "description": "Bachelor Thesis",
+  "main": "main.tex",
+  "dependencies": {
+    "nodemon": "^1.19.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "nodemon --ext tex --exec ./pdflatex.sh",
+    "bib": "biber out/main.bcf && touch main.tex"
+  },
+  "author": "Lukas Hermann",
+  "license": "ISC"
+}
