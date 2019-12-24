@@ -28,6 +28,7 @@
 % \usepackage[latin1]{inputenx} % ISO-8859-1
 %\usepackage[ansinew]{inputenx} % Windows-Standard (CP1252) (baut auf ISO 8859-1 und ISO 8859-15 auf)
 \usepackage[utf8]{inputenc}
+% \setdefaultlanguage{english}
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % 1. Einige Pakete muessen unbedingt vor allen anderen geladen werden
@@ -36,7 +37,7 @@
 \usepackage{xspace} % Define commands that don't eat spaces.
 \usepackage{ifpdf} % Fuer Pakete/Paketoptionen, die nur fuer pdf benoetigt werden \ifpdf \else \fi
 \usepackage{calc} % Calculation with LaTeX
-\usepackage[english,ngerman]{babel} % Languagesetting
+\usepackage[main=english,ngerman]{babel} % Languagesetting
 \usepackage[table]{xcolor} % Farben
 \usepackage[]{graphicx} % Bilder
 %\usepackage{epstopdf} % If an eps image is detected, epstopdf is automatically called to convert it to pdf format.
@@ -106,14 +107,14 @@
 
 \usepackage{url} % Setzen von URLs. In Verbindung mit hyperref sind diese auch aktive Links.
 \usepackage[stable,perpage, ragged,  multiple]{footmisc} % Fussnoten
-\usepackage[ngerman]{varioref} % Intelligente Querverweise
+\usepackage[english]{varioref} % Intelligente Querverweise
 \usepackage{enumitem} % Listen
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % 6. Pakete zum Zitieren
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-\usepackage[babel, german=quotes, english=british, french=guillemets]{csquotes} % clever quotations
+\usepackage[babel, english=american, german=quotes, french=guillemets]{csquotes} % clever quotations
 \SetBlockThreshold{2} % Anzahl von Zeilen
 \newenvironment{myquote}%
           {\begin{quote}\small}%

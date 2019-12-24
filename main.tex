@@ -1,4 +1,4 @@
-% % Preamble BEGINN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % Preamble BEGIN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Preamble (Dokumentenklasse)
 \input{preamble/pre-class}
@@ -16,55 +16,41 @@
 %%% Silbentrennung
 \input{preamble/pre-hyphenation}
 
-% % Nur diese Kapitel (Dateien) einbinden
-%\includeonly{
-%chapters/ch-aa-titel,
-%chapters/ch-aa-vorspiel,
-%chapters/ch-einleitung,
-%chapters/ch-hauptteil,
-%chapters/ch-schluss,
-%chapters/ch-zz-anhang
-%}
-% % Preamble ENDE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % Preamble END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% % Inhalt BEGINN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % Inhalt BEGIN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 % Tabellen-Einstellungen
 \input{preamble/pre-tablesettings}
-% % %%%%%% Vorspiel
+
+% % %%%%%% Preface
 \begin{spacing}{1} % Vorspiel immer mit Standard-Zeilenabstand setzen
-	\frontmatter
-	% % Titelblatt
-	\include{chapters/ch-aa-titel}
-	\include{chapters/ch-aa-vorspiel}
-	\include{chapters/ch-aa-zusfasg}
-	% % Verzeichnisse
-	\tableofcontents
-	\listoffigures
-	\listoftables
-	%\lstlistoflistings % Verzeichnis für Code-Listing
+  \frontmatter
+  % % Titelblatt
+  \include{chapters/a1-title}
+  \include{chapters/a2-preface}
+  \include{chapters/a3-abstract}
+  % % Verzeichnisse
+  \tableofcontents
+  \listoffigures
+  \listoftables
+  %\lstlistoflistings % Verzeichnis für Code-Listing
 \end{spacing}{1}
+
 % % %%%%%% Textteil (Eigentliche Arbeit)
 \mainmatter
-%
-\include{chapters/ch-einleitung}
-\include{chapters/ch-hauptteil}
-\include{chapters/ch-schluss}
+\include{chapters/b10-introduction}
+\include{chapters/b20-foundation}
+\include{chapters/b30-architecture}
+\include{chapters/b40-implementation}
+\include{chapters/b90-conclusion}
 
 % % %%%%%% Anhang
 \appendix
-\include{chapters/ch-zz-anhang}
+\include{chapters/z1-appendix}
 
 % % %%%%%% Literaturverzeichnis (darf im deutschen nicht in den Anhang!)
 \printbibliography
 
-% Einfaches Literaturverzeichnis
-% \input{chapters/ch-zz-bibEinfach}
-% Literaturverzeichnis mit Bibtex
-% \bibliography{bib/bib}{}
-% \bibliography{bib/internet}{}
-% \bibliography{bib/lit}{}
-% \bibliographystyle{plain}
-
-% %  Inhalt ENDE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %  Inhalt END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}

@@ -8,7 +8,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "nodemon --ext tex --exec ./pdflatex.sh",
+    "start": "npm run watch",
+    "generate": "./pdflatex.sh",
+    "watch": "nodemon --ext tex --exec ./pdflatex.sh",
     "bib": "biber out/main.bcf && touch main.tex"
   },
   "author": "Lukas Hermann",
