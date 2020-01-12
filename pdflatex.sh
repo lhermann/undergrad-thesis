@@ -10,3 +10,4 @@ pdflatex \
   main.tex
   # --quiet \
 
+exit 0
