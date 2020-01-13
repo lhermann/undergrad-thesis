@@ -62,13 +62,30 @@ In the end, the client liked what business value Docify had to offer and was wil
 
 \section{Goals of the CEMicro Service}
 
-What is the microservice supposed to do
+- What is the microservice supposed to do
 
-High Level Overview Illustration
+- High Level Overview Illustration
 
-Complexity of POS / CE Properties
+- Complexity of POS / CE Properties
 
-Out of scope: Access control
+- Out of scope: Access control
+
+
+As already noted in the previous segment the idea of a microservice for document creation is pretty straigtforward since the API is well defined from the get go. The printable document handling in POS however has three parts, besides template and dynamic values which are different on a per offer basis it defines a number of staic values inside the templates which are calles "configurable elements". The idea behind configurable values, or CEs in short, is, that they are the same on every printout, but can be defined according to a number of factors like the current language, if branded or blank paper is used, if a new or used car is sold and so on.
+
+The next segment will go into more detail what complexity was actually hidden behind the rather simple looking CEs but suffice to say at this point, the setting of these static values for printable template is cumbersome and complicated by nature of its configurability requirements.
+
+My task therefore was to extract the confirguration of these CE values into a seperate service which can be queried by the POS system to retreive the correct set of CE values for any given document template under a given set of conditions. Fo example, if the salseman using POS wants to print a offer for a new car in the Netherlands on blank paper the POS application would then send a request to this new service saying: "please give me all the configurable elements I need to print a new offer for this and that car in the Netherlands marked on blank paper". The responsibility of the service would then be to produce a list of key kay-value pairs that the POS application can then hand to the Docify serive, or its internal printing function for that matter, to be inserted into the configurable element placeholders in the document template.
+
+No much guidance was given to me beyond this point from Capgemini. I was given access to the source code of both the POS application and the Docify service and could start them on personal virtual machines to understand their working. Because several teams of developers were working on POS and after seeing the size of the codebase I quickly concluded that it would not make much sense for me to try to understand the inner workings of the existing Java code. Rather I decided to investigate the user interface of both services, and in the case of Docify, the API to understand what features the my service needs to offer and what interfaces it should expose.
+
+I decided to call the service CEMicro, short for Configurable Element Microservice. The name is rather boring and not in the vain of more modern hipster names like Spotify or Instagram, but it serves a very functional purpose in communicating quickly what it is supposed to do to an audience that is familiar with the existing cumbersome feature of configurable elements. I felt a functiona name that eases the adoption of a new service was more expedient than a nice and fancy name.
+
+Early in the planing of the application context, that is, whith whom the new application needs to communicate about what, I assumed that CEMicro only needs to talk to the POS system since in the end only the POS system will request a dataset from CEMicro. But after understanding that the templates are actually not available to POS bur rather maintained by Docify it became clear to me that either CEMicro has to have it's own copy of each template or it needs to request the template from Docify in order to know which configurable elements the template needs. Another option would have been for users to tell CEMicro which configurable elements exist and are part of which template, but this would have ment a double effort for users since each new CE that was defined inside a template in Docify needs to be additionally added to CEMicro, which brings us to the concept of the single source of truth.
+
+The single source of truth [ref] is a fundamental concept in programing that a value or variable should only be defined and maintained in one place, the source of truth. As soon as it is defined in multiple places, they have to have a system to keep each other synchronised otherwise the application state will be inconsistent. The single source of truth principle thus becomes even more important for a distributed service architecture. In a monolith application, and this is really the reason why monoliths are easier to develop and more widely used, there is usually only one database and the whole application has access to all the data. But in a distributed service architecture every individual service only has their individual database. In order to make this work each service can only handle the data of its particular domain and has to request the data of other services through their public interfaces. In the case of CEMicro the database can only contain the data of the actual configurable elements and not the data of the templates, or the user table for that matter. If copies of a dataset would exist in the databases of multiple services there would need to be a mechanism to keep all these copies in sync. This can be done through a publish-subscriber pattern [ref] but if the availability of the network can not be guaranteed, and the first rule of a networ is that its availability can not be guaranteed, then the data can become inconsistend between copies. And with computer systems where millions of daily requests is no rarity the rule that what can happen will happen is pretty much a given.
+
+It was therefore decided to include both POS and Docify in the new services context. If a user wants to manage the configurable elements of a template CEMicro will request the list of available template and then the individual template from Docify, scan it for all the placeholders which will be replaced with CE values, and add a database entry for each value with an unique composite index that is comprised of the template name and the market. The user can then edit each individual configurable element which is directly persited to CEMicro's own database. POS can then request the list of configurable element values by the unique template name and market pair. Figure \ref{fig:context} shows the public interfaces of the CEMicro service, its related third party applications and its own three layer structure of database, server and client.
 
 \begin{figure}
   \centering
@@ -77,9 +94,13 @@ Out of scope: Access control
   \label{fig:context}
 \end{figure}
 
+While the CEMicro service would become more complex than at first anticipated it was also decided to exclude some functionality from it. The reason is simply the limited time of the project, four months, and the nature of it being a proof of concept rather than a production ready application.
+
+One feature that was decided as out of scope for this project is user management, or access control. The POS application has a fairly complex structure of access controll with its various layers of authority, starting from the so called HQ, the highest entity per market, through various levels of smaller and smaller organisational structures down to the local reseller. Each of these levels can define their own set of configuration options which may or may not be overwritten by the next lower level of management. Because access control, especially such a elaborate one, adds a nother dimension of complexity to every project, it was decided to create this proof of concept whithout any, meaning there will only be one user who has can do everything.
+
+Another vital part of an application which was neglected is testing, both unit and integration testing. Testing is more if an implementation detail and will therefore be further discussed in chapter \ref{sec:impl}.
 
 \section{Understanding the task}
-\label{sec:arch:}
 
 Challenge: Understanding the task
 
