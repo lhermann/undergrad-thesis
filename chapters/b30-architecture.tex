@@ -1,11 +1,11 @@
 \chapter{CEMicro Architecture and Technology Stack}
 \label{sec:arch}
 
-How was the "is" sutation when starting?
+- How was the "is" sutation when starting?
 
-How should it look like?
+- How should it look like?
 
-How do I get there?
+- How do I get there?
 
 
 \section{The existing appliction}
@@ -14,17 +14,18 @@ The existing application which this department of Capgemini is working on in a p
 
 The part of the application which involved my task is the creation of the final offer as a printable PDF document. Depending on the object of the sale, the type of car, the current market and a host of other factors the application will decide which document template to use and will collect the appropriate lines of text and values from the database to assemble into a finished document which is then generated in the PDF format. Additionally, there are several configuration pages in the admin area of the application where these templates can be managed and the contents defined. Figure \ref{fig:pos} shows a glimpse of the rather unwieldy admin interface for the part of the document creation.
 
-There are currently six teams of about eight developers each working on the POS application.
+There are currently nine teams of about six developers each working on the POS application.
 
 \begin{figure}
-  \centering
   \begin{subfigure}[b]{0.5\linewidth}
     \includegraphics[width=\linewidth]{assets/pos-ce-config-1.png}
     \caption{Template selection}
+    \label{fig:pos:a}
   \end{subfigure}
   \begin{subfigure}[b]{0.5\linewidth}
     \includegraphics[width=\linewidth]{assets/pos-ce-config-3.png}
     \caption{One CE contains several children}
+    \label{fig:pos:b}
   \end{subfigure}
   \caption{POS configurable element admin page}
   \label{fig:pos}
@@ -37,7 +38,6 @@ Docify is a kind of textbook example for a microservice. A document printing ser
 Figure \ref{fig:docify} shows the administration interface for Docify and it is easy to see how each of the two previously mentioned API criteria has their page. On the left (a) is the list of template identifiers, each template is identified by a client-market-name tuple, and on the right (b) is the editor for template specific templates with the HTML representation on the left and the rendered preview. The HTML code contains several placeholders which will be replaced by their respective value when the document is printed out.
 
 \begin{figure}
-  \centering
   \begin{subfigure}[b]{0.5\linewidth}
     \includegraphics[width=\linewidth]{assets/docify-template-list.png}
     \caption{Template list}
@@ -59,6 +59,7 @@ One example of this directly involves my task, the so-called "Configurable Eleme
 The other business value has to do with the fact that there is currently a certain hype around microservice architectures. The project of Docify enabled Capgemini to showcase this architectural model on a fairly simple use-case to its client while not losing much in terms of wasted development time if the client declines its further development. And since a microservice can be built in a completely separate tech stack is was essentially a proof of concept/demo of a flashy new architecture and some flashy new technology.
 
 In the end, the client liked what business value Docify had to offer and was willing to invest in its development. At the time of this writing, Docify is two years old and was rolled out to two of the several markets POS is operating in. Meaning even after two years of development the POS team is still maintaining the old implementation in spite of the new and shiny microservice which is probably a good image of how large companies tend to operate if their internal structures became sufficiently complex.
+
 
 \section{Goals of the CEMicro Service}
 
@@ -100,22 +101,87 @@ One feature that was decided as out of scope for this project is user management
 
 Another vital part of an application which was neglected is testing, both unit and integration testing. Testing is more if an implementation detail and will therefore be further discussed in chapter \ref{sec:impl}.
 
-\section{Understanding the task}
 
-Challenge: Understanding the task
+\section{Understanding the existing feature}
 
-What is a configurable element?
+\begin{itemize}
+  \item What is a configurable element?
+  \item What properties does a CE have?
+  \item Challenge: Understanding the task
+  \item Challange/Example: Devs didn't know that CEs are not uniqe per template
+\end{itemize}
 
-What properties does a CE have?
+After defining what the microservice needs to accomplish and in what context it lives comes the next step in understanding exactly what functionality the new microservice needs to offer. Since we are extracting a microservice from an existing application we are also extracting a certain feature set that users have been unsing and are used to.
 
-Challange/Example: Devs didn't know that CEs are not uniqe per template
+Every application is faced with the question how to expose data to the user and how to design a system's controls. In software development this is usually called the user interface (UI) and user experience (UX). The ultimate goal is for the user interface to be intuitive, to explain itself, but in any way the user has to learn how to use the application. Even if the UI is bad or even broken, the user will eventually learn how to use that system, even if he needs to use unintended detours to reach his goal. Once the user has leant the UI however, every change will require him to re-learn even if the change is a fix of a broken behaviour.
+
+A good example of this is Windows 8 were Microsoft decided to change the user interface of the start menu button. Every windows user has learnt that the Windows Desktop is their default view and the start menu serves like a hallway to all their applications and settings. As seen in figure \ref{fig:win8} the start menu was removed in Windows 8 in favor of a hot corner that would lead to the new tiles interface. Even if the new interface would have been objectively better, with this decision Microsoft asked every Windows user to re-learn one of the core concepts of its user interface. Not surprisingly there was a huge outcry and Microsoft quickly issues a patch with Windows 8.1 restoring the start menu the people were used to.
+
+\begin{figure}
+  \begin{subfigure}[b]{0.5\linewidth}
+    \includegraphics[width=\linewidth]{assets/windows-8-taskbar.png}
+    \caption{Windows 8 taskbar without start menu button}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\linewidth}
+    \includegraphics[width=\linewidth]{assets/windows-8-hot-corner.jpg}
+    \caption{Windows 8 new hot corner}
+  \end{subfigure}
+  \caption{Windows 8 start menu UI change}
+  \source{https://www.howtogeek.com/107662/how-to-live-without-the-start-button-in-windows-8/}
+  \label{fig:win8}
+\end{figure}
+
+It is therefore imperative when extracting a microservice to understand exactly how the affected features were used by the existing users which will have to adopt, or reject for that matter, the new service. Since I was not given a list of requirements or any sort of guideline about the precise workings of configurable elements I took some time to understand the existing user interface and map out what kind of confirguarions are available to the user. The admin section for configurable element has three list view, figure \ref{fig:pos:a} shows the list of templates, figure \ref{fig:pos:c} the list of available CEs inside the selected template and figure \ref{fig:pos:b} shows a list of values that can be assigned to each CE grouped by hierarchy levels (Head quarter, MPC, etc.) and equiped witch a number of qualifying properties.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.75\linewidth]{assets/pos-ce-config-2.png}
+  \caption{List of CE pertaining to a template}
+  \label{fig:pos:c}
+\end{figure}
+
+This means CEs are not, as originally assumes a simple key-value data sctructure but in fact can contain many values, each coming with a number of properties. These properties are later used to determine which value is the best fit for the current use case. Through testing the possible values for each property were determined and mapped out in table \ref{table:ce-properties}. Figure \ref{fig:ce-properties} shows how these properties are presented to the user. Note how it is not immediatly apparent that the valid from-to dates are part of the configuration and that they can, in fact, be changed. Also note the confusing layout of the value and description text inputs, the description which has no real purpose being the first input while the actual value of the configurable element, the most important thing of the whole interface, is the last input field of them all. Additionally website users are more used to "value" fields being a single line and "description" fields being multi-line, here this logic is inverted.
+
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{|l|c|p{10cm}|}
+      \hline
+      Property & Required & Possible Values \\
+      \hline\hline
+      Name & * & [any] \\
+      \hline
+      Value & * & [any] \\
+      \hline
+      Description & & [any] \\
+      \hline
+      Language & & Any Language, English, German, French, ... \\
+      \hline
+      Paper Format & & Branded, Unbranded \\
+      \hline
+      Valid from-to & & [dates] \\
+      \hline
+      Vehicle type & & New Vehicle, Used Vehicle, Both \\
+      \hline
+      Division & & Any, MB Passenger Car, MB Van, Foreign Brand Passanger Car, MB Passenger Car \\
+      \hline
+      Brand & & Any, Mercedes Benz Passanger Cars, smart, Mercedes Benz, OTHER \\
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption{Possible properties for configurable elements}
+  \label{table:ce-properties}
+\end{table}
 
 \begin{figure}
   \centering
   \includegraphics[width=0.8\linewidth]{assets/pos-ce-config-4.png}
-  \caption{Configurable Element configuration properties}
+  \caption{Configurable element configuration properties}
   \label{fig:ce-properties}
 \end{figure}
+
+The challenge of this task was, as already noted, that no clear list of requirements or guidelines existed for the configurable elements feature which should be extracted as a microservice. An interesting detail showcasing is my advisor's surprise when I told him that configurable element names are not treated as unique per templates, meaning if multiple templates contained CEs of the same name and the user would change the value of one then the change was reflected for the other templates as well. I asked him if this was intended behaviour and he answered that he had always assumed the values to be unique to each template. I therefore decided to namespace the CEs with their respective market-templates tuple in the CEMicro application as this behaviour was more intuitively expected.
+
+Now that I had a comprehensive understanding of the current feature set for configurable elements I could start drafting the user interface and application programming interface of the new CEMicro service.
 
 
 \section{Making optimisations}
@@ -128,5 +194,3 @@ How can the complexity of CEs be exposed in a simpler way?
   \caption{User Interface mockup for CEMicro}
   \label{fig:mockup}
 \end{figure}
-
-
