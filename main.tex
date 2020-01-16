@@ -1,4 +1,4 @@
-% % Preamble BEGIN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Preamble BEGIN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Preamble (Dokumentenklasse)
 \input{preamble/pre-class}
@@ -16,41 +16,42 @@
 %%% Silbentrennung
 \input{preamble/pre-hyphenation}
 
-% % Preamble END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Preamble END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% % Inhalt BEGIN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Inhalt BEGIN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{document}
-% Tabellen-Einstellungen
-\input{preamble/pre-tablesettings}
+  % Tabellen-Einstellungen
+  \input{preamble/pre-tablesettings}
 
-% % %%%%%% Preface
-\begin{spacing}{1} % Vorspiel immer mit Standard-Zeilenabstand setzen
-  \frontmatter
-  % % Titelblatt
-  \include{chapters/a1-title}
-  \include{chapters/a2-preface}
-  \include{chapters/a3-abstract}
-  % % Verzeichnisse
-  \tableofcontents
-  \listoffigures
-  \listoftables
-  %\lstlistoflistings % Verzeichnis für Code-Listing
-\end{spacing}{1}
+  % % %%%%%% Preface
+  \begin{spacing}{1} % Vorspiel immer mit Standard-Zeilenabstand setzen
+    \frontmatter
+    % % Titelblatt
+    \include{chapters/a1-title}
+    \include{chapters/a2-preface}
+    \include{chapters/a3-abstract}
+    % % Verzeichnisse
+    \tableofcontents
+    \listoffigures
+    \listoftables
+    %\lstlistoflistings % Verzeichnis für Code-Listing
+  \end{spacing}{1}
 
-% % %%%%%% Textteil (Eigentliche Arbeit)
-\mainmatter
-\include{chapters/b10-introduction}
-\include{chapters/b20-foundation}
-\include{chapters/b30-architecture}
-\include{chapters/b40-implementation}
-\include{chapters/b90-conclusion}
+  % % %%%%%% Textteil (Eigentliche Arbeit)
+  \mainmatter
+  \include{chapters/b10-introduction}
+  \include{chapters/b20-foundation}
+  \include{chapters/b30-architecture}
+  \include{chapters/b40-implementation}
+  \include{chapters/b90-conclusion}
 
-% % %%%%%% Anhang
-\appendix
-\include{chapters/z1-appendix}
+  % % %%%%%% Anhang
+  \appendix
+  \include{chapters/z1-appendix}
 
-% % %%%%%% Literaturverzeichnis (darf im deutschen nicht in den Anhang!)
-\printbibliography
+  % % %%%%%% Literaturverzeichnis (darf im deutschen nicht in den Anhang!)
+  \printbibliography
 
-% %  Inhalt END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % %  Inhalt END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}

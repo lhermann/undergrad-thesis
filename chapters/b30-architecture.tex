@@ -41,10 +41,12 @@ Figure \ref{fig:docify} shows the administration interface for Docify, and it is
   \begin{subfigure}[b]{0.5\linewidth}
     \includegraphics[width=\linewidth]{assets/docify-template-list.png}
     \caption{Template list}
+    \label{fig:docify:a}
   \end{subfigure}
   \begin{subfigure}[b]{0.5\linewidth}
     \includegraphics[width=\linewidth]{assets/docify-editor.png}
     \caption{Template editor}
+    \label{fig:docify:b}
   \end{subfigure}
   \caption{Docify template editor app}
   \label{fig:docify}
@@ -141,7 +143,7 @@ It is, therefore, imperative when extracting a microservice to understand precis
 
 This means CEs are not, as initially assumes, a simple key-value data structure but, in fact, can contain many values, each coming with a number of properties. These properties are later used to determine which value is the best fit for the current use case. Through testing, the possible values for each property were identified and mapped out in table \ref{table:ce-properties}. Figure \ref{fig:ce-properties} shows how these properties are presented to the user. Note how it is not immediately apparent that the valid from-to dates are part of the configuration and that they can, in fact, be changed. Also note the confusing layout of the value and description text inputs, the description which has no real purpose being the first input while the actual value of the configurable element, the most important thing of the whole interface, is the last input field of them all. Additionally, website users are more used to "value" fields being a single line and "description" fields being multi-line, here this logic is inverted.
 
-\begin{table}[h!]
+\begin{table}[!ht]
   \begin{center}
     \begin{tabular}{|l|c|p{10cm}|}
       \hline
@@ -193,7 +195,7 @@ The client is made up of a markup language HTML for the brower together with CSS
   \centering
   \includegraphics[width=0.8\linewidth]{assets/caniuse-promises.png}
   \caption{Browser support for JavaScript Promises}
-  \source{https://caniuse.com/#feat=promises}
+  \source{https://caniuse.com/\#feat=promises}
   \label{fig:caniuse-promises}
 \end{figure}
 
