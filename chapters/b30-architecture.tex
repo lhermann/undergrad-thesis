@@ -1,11 +1,11 @@
 \chapter{CEMicro Architecture and Technology Stack}
 \label{sec:arch}
 
-- How was the "is" situation when starting?
-
-- How should it look like?
-
-- How do I get there?
+\begin{itemize}
+  \item \done{How was the "is" situation when starting?}
+  \item \todo{How should it look like?}
+  \item \todo{How do I get there?}
+\end{itemize}
 
 
 \section{The existing appliction}
@@ -63,13 +63,12 @@ In the end, the client liked what business value Docify had to offer and was wil
 
 \section{Goals of the CEMicro Service}
 
-- What is the microservice supposed to do
-
-- High-Level Overview of Illustration
-
-- The complexity of POS / CE Properties
-
-- Out of scope: Access control
+\begin{itemize}
+  \item \done{What is the microservice supposed to do}
+  \item \done{High-Level Overview of Illustration}
+  \item \done{The complexity of POS / CE Properties}
+  \item \done{Out of scope: Access control}
+\end{itemize}
 
 
 As already noted in the previous segment, the idea of a microservice for document creation is pretty straightforward since the API is well defined from the get-go. The printable document handling in POS, however, has three parts. Besides template and dynamic values, which are different on a per offer basis, it defines a number of static values inside the templates, which are called "configurable elements." The idea behind configurable values, or CEs in short, is, that they are the same on every printout, but can be defined according to a number of factors like the current language if the paper is branded or blank if a new or used car is sold and so on.
@@ -105,10 +104,10 @@ Another vital part of an application that was neglected is testing, both unit, a
 \section{Understanding the existing feature}
 
 \begin{itemize}
-  \item What is a configurable element?
-  \item What properties does a CE have?
-  \item Challenge: Understanding the task
-  \item Challange/Example: Devs didn't know that CEs are not unique per template
+  \item \done{What is a configurable element?}
+  \item \done{What properties does a CE have?}
+  \item \done{Challenge: Understanding the task}
+  \item \done{Challange/Example: Devs didn't know that CEs are not unique per template}
 \end{itemize}
 
 After defining what the microservice needs to accomplish and in what context it lives comes the next step in accurately understanding what functionality the new microservice needs to offer. Since we are extracting a microservice from an existing application, we are also extracting a specific feature set that users have been using and are used to.
@@ -184,9 +183,47 @@ The challenge of this task was, as already noted that no definite list of requir
 Now that I had a comprehensive understanding of the current feature set for configurable elements, I could start drafting the user interface and application programming interface of the new CEMicro service.
 
 
-\section{Making optimisations}
+\section{Deciding the Technology}
 
-How can the complexity of CEs be exposed in a more straightforward way?
+I decided to build CEMicro as a modern web app. A web app is a website that behaves like an application instead of simply showing information to the user. It consist of three layers as shown in the context diagram in figure \ref{fig:context}. The client is the user interface that is displayed in your browser, the server provides the API and business logic for the client and the database to store the data.
+
+The client is made up of a markup language HTML for the brower together with CSS for visual styling and a templating engine pr frontend framework written in JavaScript. Javascript is a programming language that can run natively inside every browser, there are other language a browser can run like Java, but only if appropriate plugins are installed. While JavaScript was first introduced in the early days of the internet with the very first Netscape and Internet Explorer browsers it has only become a viable choice for more ambitious projects during last decade (I am writing this in 2020) when the language became versitile enough and especially gained sufficient browser support to be considered for bigger projects. A good example for this are so called promises, a data type needed for asynchronous programming, which both Chrome and Firefox only support since 2014 ~\cite{caniuse.2020} as seen on the Can I Use graph in figure \ref{fig:caniuse-promises}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{assets/caniuse-promises.png}
+  \caption{Browser support for JavaScript Promises}
+  \source{https://caniuse.com/#feat=promises}
+  \label{fig:caniuse-promises}
+\end{figure}
+
+A software project is often build on to of a library or framework that handles all the infrastructure setup and allows the developers to focus on the main business logic. The POS application, for example, uses the Java Spring Framework. For the client side of web apps there are currently three strong frameworks, namely React, Vue and Angular, with React being the most popular according to The State of Javascript Survey 2019, see figure \ref{fig:frontend-framework-usage} ~\cite{stateofjs.2019}. At first I wanted to use Angular because the current Docify team who are alsow developing their application on a three layer architecture with JavaScript for both client and server are using Angular as their client side framework. However, after spending some time working with the framework I decided to switch to Vue since Angular has a pretty steep learning curve and I had already advanced experience with Vue from previous projects. Because the time for this thesis is limited to four month and the result is suppoded to be a proof of concept I felt justified in using a technology that I am more familiar with even thought the local developer team at Capgemini is using a different framework.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{assets/frontend-framework-usage.png}
+  \caption{Usage statistics of current front end frameworks}
+  \source{https://2019.stateofjs.com/front-end-frameworks/}
+  \label{fig:frontend-framework-usage}
+\end{figure}
+
+Node.js is a runtime allowing the use of JavaScript on the server side. Because the client side of a web app has to be built in JavaScript it is also a great choice for the server side, thus the team only needs to have expertise in one programming language. The server side framework the Docify team is using is called Express and is with 96\% awareness among JavaScript developers basically the bread and butter tool for such a task ~\cite{stateofjs.2019}. The reason I am constantly refering to the Docify team is because, as already mentioned, they are the other microservice team using a JavaScript technology stack on the POS project. They are therefore my reference and also most likely the people that will continue with the development of CEMicro after I am finished.
+
+PostgreSQL is the database which I am going to use for the data layer of CEMicro, it is the up and coming open source relational database with a solid set of features ~\cite{stackoverflow.2019}. There are other databses out there like the more common MySQL and MongoDB, that uses an object based system geared towards development with JavaScript, but since once again the Docify team is running PostgreSQL and the CEMicro service had no extraudinary requrements towards data persistence I felt not much need to choose any other database system.
+
+I would like to mention one more technology outside the three layer structure which is vital to the idea of microservices as is, and that is virtualisation or containerisation software. In the theoretical section about which problems microservices solve on page \pageref{sec:theory:what-problem} one strong point in favor of a microservice architecture is the scalability argument. But in order for a service to be scalable, especially automatically in reaction to load, there needs to be a way to start and stop an instance of that service without manual interaction. Containerisation is not the first concept making this possible, but by far the most sophisticated one. A container is basically an instance of a service which is self-contained, meaning it contains all the parts the software needs to run independend of the setupt of the server. With the right software such a container can then be started on any device and copied as often as needed. The right software for this is Docker which has become the de-facto standard for containerization and is the most loved platform for this purpose among developers ~\cite{stackoverflow.2019}.
+
+From the get-go I developed CEMicro in a way that in can later be run inside Docker containers. That means if you want to run CEMicro in the future, instead of needing to understand each technology and how to run it on your machine, all you needed to do is run one docker command and the app is ready for use.
+
+
+\section{Designing the API}
+
+
+\section{Designing the User Interface}
+
+\begin{itemize}
+  \item \todo{How can the complexity of CEs be exposed in a more straightforward way?}
+\end{itemize}
 
 \begin{figure}
   \centering
@@ -194,3 +231,5 @@ How can the complexity of CEs be exposed in a more straightforward way?
   \caption{User Interface mockup for CEMicro}
   \label{fig:mockup}
 \end{figure}
+
+
