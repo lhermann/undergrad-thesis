@@ -2,6 +2,13 @@
 \label{sec:theory}
 
 
+\section{What is a monolith?}
+
+Before defining a microservice, it is advisable to understand what a monolith is since we are going to use them as a comparison. A monolithic is an "application built as a single unit" \ref{microservices.2014}. Enterprise applications are built with a single code base that is maintained in one place by a team or several teams, all working on that one application. Three horizontal layers often separate these applications, the data persistence layer, or database, the server, and the client. The cuts for these layers run along technological boundaries instead of boundaries related to business domains. A business domain is, for example, a part of a software that takes care of user management, another domain may be concerned with all payment-related parts of the application. A layer, however, groups all part of an application that uses the same technology, for example, Java as the server-side language.
+
+The term "monolith" describing an extensive system derives from the Unix community, which uses the term to describe systems that became too big \ref{raymond.2003}. When the term is used in literature or conversation, it usually describes a system that has grown very large over time and is very unwieldy for developers to work with. The development of monolith systems tends to be slow, and maintenance is high. Such systems are widespread in the industry and usually so big that several developer teams are needed to keep them running. Because a monolith is a single unit, it is very natural for its programming code to become tightly coupled between its various modules. This has the effect that programmers need more time to understand relationships inside the code than actually writing new code. Developers do not favor large applications of this type.
+
+
 \section{What is a microservice?}
 
 
@@ -10,6 +17,29 @@
   \item \todo{General definition and how it works}
   \item \todo{Get some ideas from the it-innovations article ...}
 \end{itemize}
+
+A microservice has four characteristics that set it apart from a monolith.
+
+\subsection{Independently Deployable Services}
+
+Every software is made up of smaller parts, usually called components. The basic concept of Object-Oriented programming, for example, is that all functions and data related to one object, like a product of a store, live in one class. The class houses the data and exposes methods for other parts of the application to interface with its data. The whole application is tied together by function calls that happen inside the memory of a physical machine.
+
+A microservice, on the other hand, is an application that lives on a physically different machine from other services and communicates through mechanisms like an HTTP request. Services don't always have to be on separate machines, but they are always treated like closed systems, and communication happens as if they were on physically separate machines.
+
+Changes in one part of an application that consists of components only take effect when redeploying the whole application. For monoliths, this means that even small changes relative to the entire codebase require a redeploy of the whole system. A system made up of microservices only needs to redeploy the specific service where the change was made. A change in one service may also depend on a change of another service, which means there needs to be some coordination when updating them. However, in general, a microservice is independent of its neighbors and can be deployed and, more importantly, scaled as such.
+
+
+\subsection{Organized around Business Capabilities}
+
+In his excellent article about microservices \ref{microservices.2014} Martin Fowler mentions Conway's Law \ref{conway.1968} in regards to large applications. The law states that "any organization that designs a system [...] will inevitably produce a design whose structure is a copy of the organization's communication structure." An organization's structure for software projects often groups different technologies into layers, which leads to different teams skilled for different tasks. An example may be the backend team and the frontend team. Working cross team is usually accompanied by some red tape like budget approvals leading to teams optimizing to solve problems internally. This leads to business logic ending up in places of the system where it shouldn't.
+
+There are many ideas to minimize this effect, a more popular one being Domain-Driven Design \ref{evans.2003}. All these approaches, however, call for discipline during development. A microserver, on the other hand, is not organized around technology but a business need. For example, the hands-on part of this paper deals with a service for generating a PDF document. A team working on a microservice, therefore, needs to be cross-functional and therefore avoids organizational barriers.
+
+
+\subsection{Decentralized Governance}
+
+\subsection{Decentralized Data Management}
+
 
 
 \section{Why are microservices currently interesting?}
