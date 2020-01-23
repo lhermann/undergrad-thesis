@@ -24,7 +24,7 @@ The term "monolith" describing an extensive system derives from the Unix communi
   \item \done{Get some ideas from the it-innovations article ...}
 \end{itemize}
 
-A microservice has four characteristics that set it apart from a monolith.
+A microservice has four characteristics that set it apart from monoliths.
 
 \subsection{Independently Deployable Services}
 
@@ -50,7 +50,6 @@ When splitting an application into multiple services, the developer has the choi
   \centering
   \includegraphics[width=0.4\linewidth]{assets/illustration-monolith-hammer.png}
   \caption{Not every problem is a nail}
-  \label{fig:illustration-monolith-hammer}
 \end{figure}
 
 Amazon's "You build it, you run it" methodology is an excellent example of the advantages of decentralized governance ~\cite{amazon.2015}. The idea is that the same team which builds a service is also responsible for running it. According to Stephen Orban, General Manager of an AWS Service, this "forces development teams to think about how their software is going to run in production as they design it." Leading to better software quality and more ownership among the team. Because the developers are ultimately responsible,  they make an effort to avoid bad practices. According to Orban, this even leads to more automation, because developers are inherently lazy and try to avoid repetitive tasks, and more customer satisfaction because the dev team has direct contact with the customer.
@@ -76,11 +75,35 @@ Decentralized data management is the main reason why microservice architectures 
 \section{Why are microservices currently interesting?}
 
 \begin{itemize}
-  \item \todo{(Why)}
-  \item \todo{Application development until now with monoliths \& waterfall}
-  \item \todo{Avarage life and maintenance effort of a big application}
-  \item \todo{Rise of Agile, the Cloud and quick deployment cycles}
+  \item \done{Application development until now with monoliths \& waterfall}
+  \item \done{Avarage life and maintenance effort of a big application}
+  \item \done{Rise of Agile, the Cloud and quick deployment cycles}
+  \item \done{Rise of Software as a Service (SaaS), hiding complexity behind an API ~\cite[p.~359]{melzer.2010}}
 \end{itemize}
+
+Up until recently, building software worked like building a house. A team made a plan for the finished application, then developed it and then it was finished. The industry calls this the waterfall method, finishing all the plans before starting development. The finished software was one piece, and it was also sold as such. However, software is very different from real-world construction in that our digital systems became more and more complex. This complexity meant that it was necessary to keep software up to date. It meant that companies still needed to extend a finished software product by additional functions and actively maintain it. Surprisingly little thought went into the length of the life of an application, probably because the field of software development was comparatively new, and nobody knew where the journey would lead.
+
+An excellent example of this was the fear around the Y2K bug. The only reason for the bug was that developers hadn't considered that people would use their product for so long. Today we can look back in hindsight, knowing that it is not uncommon for software to live over ten or even 20 years. Especially industry applications see long years of life.
+
+Around the year 2001, developers started adopting agile development methods over the traditional waterfall approach ~\cite{agile.2020}. Clients demanded faster release cycles. A traditional software project can take years to completion. Stakeholders wanted prototypes, and developers needed more flexibility than before. All these factors helped agile methodologies to rise to the top until they became the de-facto way of doing software development.
+
+Meanwhile, the internet became robust and fast enough to support decentralized computation, the cloud where more and more applications found their home. The cloud transformed the desktop computer into a client, which mainly uses services running in some datacenter instead of executing a program on its hardware. Now developers were no longer restricted by the need to distribute updates to thousands of individual machines. Upgrading an application in the cloud once was enough; every customer immediately reaped the benefits. In turn, management understood that software no longer needs to be completed before selling it to the market because it can be updated often, the more often, the better. This required developer teams to ways to shorten their development cycles more and more. Today it is normal for an application to have a pipeline for continuous deployment or continuous integration, meaning the developer can trigger a process that goes through the necessary steps to update the software automatically. This represents a considerable speedup from doing everything manually.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.3\linewidth]{assets/illustration-microservice-cd.png}
+  \caption{Continuous Deployment, short CD}
+\end{figure}
+
+Before we come to the topic of microservices, we want to look at one more innovation of the computer age that is digging the grave of monolith systems. In recent years so-called Software as a Service, short SaaS, has gained considerable prevalence. The idea behind Saas is that a complex task is hidden away behind an interface. The user can pay for the service on a per-use basis, or via subscription, trigger the task and wait for the result. It makes sense because, in almost every scenario, it is cheaper to buy a software solution than to build it yourself. In today's startup world, especially, these "buy or build" decisions are essential for building complex applications with limited means. A great example of a SaaS product is the email marketing service Mailchimp that takes care of managing email subscriber lists and sending of marketing emails. Like basically every other aspect of the internet email started as a simple protocol and has developed into an incredibly complex system that makes sure that legitimate email arrives at its destination and fraudulent messages are filtered out. According to its own marketing page Mailchimp "averages \$52 ROI for every dollar spent" on email ~\cite{mailchimp.2020}. Meaning a customer can buy functionality that seamlessly integrates with his system through an interface without having to stem the cost and expertise of this functionality. Meanwhile, Mailchimp is running on a completely separate infrastructure saving the customer not only the development but also data centers, cybersecurity concerns, maintenance, and all the other new challenges the cloud brought to our modern age.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{assets/mailchimp-brand.png}
+  \source{https://mailchimp.com/about/brand-assets/}
+\end{figure}
+
+Once we reach this point, it is easy to connect the dots from third-party SaaS products to an individual application itself running as a cluster of services. In the end, the appeal for companies to break up monolith systems into service-oriented architectures lies in the idea of hiding the complexity of software behind an API\footnote{Application Processing Interface – a way to tell a service to do a specific task or request particular set of data} and looking at it as a business process ~\cite[p.~359]{melzer.2010}. A microservice essentially becomes a black box. The development team takes care that the service works and is at liberty to decide how to solve problems. To everyone else, the service represents an API that they can use to solve their issues.
 
 
 \section{Which problem does a microservice solve?}
