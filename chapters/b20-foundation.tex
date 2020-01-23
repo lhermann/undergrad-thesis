@@ -56,6 +56,7 @@ Amazon's "You build it, you run it" methodology is an excellent example of the a
 
 
 \subsection{Decentralized Data Management}
+\label{sec:theory:decentralized-data}
 
 Decentralized data management is likely the single biggest challenge with service-oriented architectures. Monoliths use a single database for the entire application, which makes data management easy. Microservices can also share a single database that would avoid the problem of having to save data in a distributed way or sync data across multiple databases, see figure \ref{fig:decentralised-data}. So why should microservices manage distributed data? The answer is encapsulation, which is a term in computer science, essentially saying that one component should handle all of its concerns internally, and another component should not know about them ~\cite{krivtsov.2019}.
 
@@ -116,6 +117,13 @@ Once we reach this point, it is easy to connect the dots from third-party SaaS p
   \item \todo{Work/Effort of microservice compared to monolith}
 \end{itemize}
 
+\subsection{Deploy individually}
+\subsection{Boundaries are clear}
+\subsection{Scale the part that needs more resources}
+\subsection{The right tool for the right job}
+
+
+
 
 \section{When does a microservice make sense?}
 
@@ -138,6 +146,48 @@ Once we reach this point, it is easy to connect the dots from third-party SaaS p
 \section{Challenges of implementing a microservice}
 
 \begin{itemize}
-  \item \todo{Complexity of ecosystem}
-  \item \todo{Design challange because often monolith software is old and overcomplicated. This complication should be simplified in the new microservice.}
+  \item \done{Complexity of ecosystem}
+  \item \done{Design challenge because often monolith software is old and overcomplicated.}
 \end{itemize}
+
+
+\subsection{Decentralized Data}
+
+The probably greatest challenge with microservices is decentralized data management. As already noted in the section on page \pageref{sec:theory:decentralized-data}, it is unavoidable with microservices to have distributed databases. The challenge for the developers is to design the system, such as not to create data duplication. For example, almost every service usually needs access to user data. Think of an order or a shopping cart; it always has an assigned to a user. In monoliths, it is comparatively cheap to greedily query the database for the respective object together with its user. In a microservice environment, this cannot be done on the database level. Instead, the program iterates over all objects and request each user with an expensive API call from another service. There are solutions to parallelize these requests, which reduces the time for such operations tremendously. An example in JavaScript is the \inlinecode{Promise.all()} function which can handle parallel asynchronous calls in arrays ~\cite{mdn.2020}. But the better architectural ideal is to avoid them altogether.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.55\linewidth]{assets/illustration-decentralized-data.png}
+  \caption{Decentralized data is hard to manage}
+\end{figure}
+
+Let's use a shopping cart webpage as an illustration of how to deal with this constraint. In a traditional monolith, the server queries all data greedily from the database, assembles the page, and sends the assembled HTML template to the user. In a microservice environment, the page runs a JavaScript framework frontend, which needs to request all the data from the server. The frontend sends a request to the shopping cart service for the current state of the user's cart. The shopping card service could directly request the orders from the order component, but this would result in a more expensive request, making the user wait. Instead, the shopping cart component can answer with a list of order IDs. Not the frontend already knows how many orders it needs to display and can show placeholders to the user. There may be additional info in the service's response like the total amount payable, which the page can show already. Next, the frontend asks the order service API for all the orders by ID. As each order arrives, the frontend can fill the placeholder with actual information. The total loading time is a little longer than having the shopping cart service assemble the information directly, but it results in better user experience.
+
+
+\subsection{Disciplined Communication}
+
+Inside a monolith, the individual components can call each other's methods to get information or trigger tasks. Because method calls are cheap, it doesn't matter very much how many method calls a specific task needs to make. It is also comparatively easy to understand other methods or even to add new ones as required.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.25\linewidth]{assets/illustration-microservice-flags.png}
+  \caption{Microservice communication requires more discipline}
+\end{figure}
+
+A microservice is essentially a black box with a public interface, an API. API calls are almost always HTTP requests using the internet to connect to the other end. The internet has an inherent latency, which usually is around 150-300 ms, an eternity for a computer. It means API calls are by magnitudes more expensive than simple method calls inside a program. It is, therefore, essential that developers think carefully when and how often other services are requested. It is especially crucial when not only one data point but a whole set is processed. As noted in the previous section, there are ways a programming language provides to parallelize such expensive tasks. But the better solution is to design the system in such a way as to minimize API requests or optimize tasks, so they are processes in smaller junks.
+
+
+\subsection{Operational Complexity}
+
+Each service is deployed individually and requires its deployment pipeline, staging instance, version control, and error reporting ~\cite{fachat.2019.1}. In other words, the operational part of running and deploying the application is multiplied. Additionally, each service can use different technology, dependencies, and even third-party services. Because services nowadays run in the cloud, every instance is connected to the open internet. Thus authentication layers have to be managed, and services need permissions to call each other APIs and to access their respective databases. A bigger operations team is needed to manage the additional complexity. This point is one of the reasons why new projects should start as microservices and grow into service-oriented architectures as the need arises ~\cite{krivtsov.2019}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.25\linewidth]{assets/illustration-microservice-stack.png}
+  \caption{Microservice architecutres require a mature ops team}
+\end{figure}
+
+
+\section{Warp-up}
+
+\todo{Warp-up}
