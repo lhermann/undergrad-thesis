@@ -111,15 +111,38 @@ Once we reach this point, it is easy to connect the dots from third-party SaaS p
 \label{sec:theory:what-problem}
 
 \begin{itemize}
-  \item \todo{(Why)}
   \item \todo{Why is a microservice better than a monolith?}
   \item \todo{Advantages \& Disadvantages of microservices}
   \item \todo{Work/Effort of microservice compared to monolith}
 \end{itemize}
 
 \subsection{Deploy individually}
+
+In a monolith system, change cycles are tied together. Meaning if one part of the application changes, the whole system needs to be redeployed. Redeployment not only means assigning a new version number and uploading the updated files, but it also requires the whole deploy pipeline to run. It means the entire application has to undergo testing to make sure all functions, even those not touched by the change, work as expected. Naturally, the bigger an application, the more effort the testing phase represents. If multiple teams are working on a software project, new features are usually bundled into one release and tested together. Release cycles of three months or even a year are not uncommon.
+
+Microservices are simplifying the deployment process considerably because they physically separate individual parts of the application from one another. Meaning one service can deploy changes in isolation. Testing becomes an almost trivial task since the scope is naturally limited, and side effects are virtually non-existent. Additionally, a new feature can deploy directly to production as new features don't have to be bundled any more for the sake of testing. It means with microservices deployment is cheap and can often occur, bringing release cycles down to weeks or even days.
+
+However, there are also new complications. If the API of a service changes, it does directly influence other services. The solution here is to version the API and support both old and new in parallel until all other services have migrated. In turn, if a new feature depends upon a new API of another service, the release has to be postponed until the API is available or deployed behind a feature switch/footnote{A feature switch is a true/false value. They can turn a feature off or on at any given time without the need to redeploy the entire application}.
+
+
 \subsection{Boundaries are clear}
+
+Tight coupling ~\cite{kaye.2003} is one of the most challenging problems of large systems. Tight coupling happens if two independent components know of and use each other's internal workings. Changing one necessitates understanding and changing the other component too. Because it is a well-known problem among programmers, there are many concepts to avoid it, like the open-closed principle. But ultimately, it needs a lot of developer discipline to keep a system loosely coupled. Especially if a system is older and has undergone many changes, tight coupling is unavoidable despite best intentions as every developer who worked on a real-world example knows very well. In monolith systems, it ultimately boils down to keeping tight coupling manageable while not wasting too much time with refactoring.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.55\linewidth]{assets/illustration-setting.png}
+  \caption{With micoservices it is easy to keep changes localized}
+\end{figure}
+
+Microservices, by design, avoid the problem of tight coupling altogether. Because individual services can only communicate through their public APIs and do not share data, see page \pageref{sec:theory:decentralized-data}, their boundaries are necessarily hard. Making changes or developing new features inside a microservice is, therefore, much faster since the developer doesn't need to worry about any side-effects. As a software developer, I know that tight coupling is one of the most significant time sinks when developing new features because it forces me to understand many parts of the application that have nothing to do with my immediate task.
+
+
 \subsection{Scale the part that needs more resources}
+
+
+
+
 \subsection{The right tool for the right job}
 
 
@@ -128,7 +151,6 @@ Once we reach this point, it is easy to connect the dots from third-party SaaS p
 \section{When does a microservice make sense?}
 
 \begin{itemize}
-  \item \todo{(Why)}
   \item \todo{What type of application are microservices best suited for? (Scallable, defined scope)}
   \item \todo{Good size of a team for a microservice}
   \item \todo{When not to use distributed service architecture}
@@ -138,7 +160,6 @@ Once we reach this point, it is easy to connect the dots from third-party SaaS p
 \section{How to extract a microservice?}
 
 \begin{itemize}
-  \item \todo{(How)}
   \item \todo{How to make a cut in a big application (monolith)}
 \end{itemize}
 
