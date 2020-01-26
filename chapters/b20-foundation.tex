@@ -24,7 +24,7 @@ The term "monolith" describing an extensive system derives from the Unix communi
   \item \done{Get some ideas from the it-innovations article ...}
 \end{itemize}
 
-A microservice has four characteristics that set it apart from monoliths.
+A microservice has four characteristics that set it apart from monoliths. They are independently deployable while monoliths can only be deplyed as one blcok. Microservices are organized around business capabilities avoiding the problem of "logic everywhere" ~\cite{microservices.2014}. Each service is governed independently simplyfing development but increasing operations overhead. And their data management is decentralized, whch poses a challenge compared to monoliths.
 
 \subsection{Independently Deployable Services}
 
@@ -111,10 +111,12 @@ Once we reach this point, it is easy to connect the dots from third-party SaaS p
 \label{sec:theory:what-problem}
 
 \begin{itemize}
-  \item \todo{Why is a microservice better than a monolith?}
-  \item \todo{Advantages \& Disadvantages of microservices}
-  \item \todo{Work/Effort of microservice compared to monolith}
+  \item \done{Why is a microservice better than a monolith?}
+  \item \done{Advantages \& Disadvantages of microservices}
+  \item \done{Work/Effort of microservice compared to monolith}
 \end{itemize}
+
+Microservice architecture is the answer to the question of scalability and quick deploy cycles, which are becoming ever more critical in today's world of cloud computing. While solving these two primary concerns, it also helps with clear separation of concerns and free choice of technology and speeds up development. However, these gains come at the cost of more sophisticated infrastructure and more significant operations overhead.
 
 \subsection{Deploy individually}
 
@@ -140,12 +142,38 @@ Microservices, by design, avoid the problem of tight coupling altogether. Becaus
 
 \subsection{Scale the part that needs more resources}
 
+Scaling an application is becoming a bigger requirement in today's world, where everything is in the cloud. Take Netflix, for example; it needs to serve huge amounts of data to its customers depending on both location and time. It needs to make sure that enough network bandwidth is available for the evening and weekend peaks while avoiding idle resources during the workday. Netflix also makes different shows and languages available in different geographic regions depending on the licensing rights. As sown in figure \ref{fix:netflix-architecture}, Netflix uses a whole host of services with various specifications and responsibilities ~\cite{netflix.2013}.
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.4\linewidth]{assets/netflix-architecture.png}
+  \caption{The Netflix architecture; suffice to say, it uses a lot of services}
+  \source{https://netflixtechblog.com/system-architectures-for-personalization-and-recommendation-e081aa94b5d8}
+  \label{fix:netflix-architecture}
+\end{figure}
+
+Would Netflix develop their entire system as a monolith and one aspect, say the movie recommendation algorithm, needs scaling, then two whole application requires duplication. It is highly cost-ineffective, especially for a company of that size with millions of users. With service-oriented architecture, just the part responsible for the recommendation algorithm needs to be scaled up. Because the scaling is limited in scope, only the right amount of additional computing power is used, saving the company much in infrastructure costs. Additionally, spinning up an instance of an entire application is usually complicated and time-consuming. But in big infrastructures such as Netflix, scaling happens in near-realtime with the help of algorithms ~\cite{netflix.2013}. It is, therefore, necessary to instantiate individual services as fast as possible to react to new demand in time.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.55\linewidth]{assets/illustration-monolith-scaling.png}
+  \caption{Monoliths can only be scaled as one block}
+\end{figure}
+
+Only a microservice architecture enables such granular scaling. On the other hand, the more services make up an application, the more intricate it becomes to operate. A company has to balance the overhead of complexity with the benefit of cost-savings in infrastructure. For this reason, smaller companies shouldn't start immediately with a granular service architecture. It may be more cost-effective to start with a monolith and break it up later, even if this means additional development time for refactoring.
 
 
 \subsection{The right tool for the right job}
 
+Distributed governance means that each team can choose the tool that fits their problem best. With monoliths, there is always a technology lock-in for the programming language and even frameworks and libraries. Microservices avoid this limitation by design. If, for example, the default technology stack for a software project is Java, but one service is using a machine learning model, this service can be written in Python for which more machine learning libraries are available.
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.4\linewidth]{assets/illustration-monolith-hammer.png}
+  \caption{Not every problem is a nail}
+\end{figure}
+
+There is but one catch, in the real world product managers don't like to employ new people but want to rely on existing skills. If teams change, it is essential for them that new team members can hit the ground running, which is easier if services use similar technologies. But even then, the flexibility to pick and choose libraries and frameworks best suited to the task is a massive win for the developer. The most significant time sink is usually legacy code and old dependencies, which can't be updated because some arcane part of the codebase is still using an outdated method. Microservices isolate such problems and speed up development.
 
 
 \section{When does a microservice make sense?}
@@ -171,6 +199,8 @@ Microservices, by design, avoid the problem of tight coupling altogether. Becaus
   \item \done{Design challenge because often monolith software is old and overcomplicated.}
 \end{itemize}
 
+There are three main challenges with the architectural style of microservices that require the developer to rethink some deign decitions. The data is distributed so the developer has to deal with eventual consistency .communication between services is expensive which requires more discipline and less greediness when requesting data. And the increased complexity of the infrastructure requires more resources in operations.
+
 
 \subsection{Decentralized Data}
 
@@ -183,6 +213,18 @@ The probably greatest challenge with microservices is decentralized data managem
 \end{figure}
 
 Let's use a shopping cart webpage as an illustration of how to deal with this constraint. In a traditional monolith, the server queries all data greedily from the database, assembles the page, and sends the assembled HTML template to the user. In a microservice environment, the page runs a JavaScript framework frontend, which needs to request all the data from the server. The frontend sends a request to the shopping cart service for the current state of the user's cart. The shopping card service could directly request the orders from the order component, but this would result in a more expensive request, making the user wait. Instead, the shopping cart component can answer with a list of order IDs. Not the frontend already knows how many orders it needs to display and can show placeholders to the user. There may be additional info in the service's response like the total amount payable, which the page can show already. Next, the frontend asks the order service API for all the orders by ID. As each order arrives, the frontend can fill the placeholder with actual information. The total loading time is a little longer than having the shopping cart service assemble the information directly, but it results in better user experience.
+
+If services need to be scaled up and their databses duplicated then developers have to deal with "eventua consistency" ~\cite{fowler.2015}. It ca no longer assumed that data is consistend because write access for the same resource happens accross multiple databases simultaneously. Eventyally tha data will be synced between all database duplicates or managed by a master database, but at every given moment the developer has to assume that the data is not exactly consistent.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.70\linewidth]{assets/youtube-view-counter.png}
+  \caption{The YouTube view counter is an example for eventual consistency because of service oriented architecture}
+  \source{https://www.youtube.com/watch?v=RY_2gElt3SA}
+\end{figure}
+
+An great example is the YouTube view counter. It is essential for YouTube to have a correct view count because it is essentially their internal currency and used to calculate advertisement revenue. But views occure in different countries all accross the world hitting many different servers. So the number off views each user sees can be different depending on the particular server they requested and the moment in time. But eventually all counts are tallied up and one authoritative number is calculated
+~\cite{scott.2018}.
 
 
 \subsection{Disciplined Communication}
