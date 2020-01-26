@@ -39,6 +39,12 @@ Changes in one part of an application that consists of components only take effe
 
 In his excellent article about microservices ~\cite{microservices.2014} Martin Fowler mentions Conway's Law ~\cite{conway.1968} in regards to large applications. The law states that "any organization that designs a system [...] will inevitably produce a design whose structure is a copy of the organization's communication structure." An organization's structure for software projects often groups different technologies into layers, which leads to different teams skilled for different tasks. An example may be the backend team and the frontend team. Working cross team is usually accompanied by some red tape like budget approvals leading to teams optimizing to solve problems internally. This leads to business logic ending up in places of the system where it shouldn't.
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.4\linewidth]{assets/illustration-microservice-printer.png}
+  \caption{The domain of this microservice: converting a dataset into a printed page}
+\end{figure}
+
 There are many ideas to minimize this effect, a more popular one being Domain-Driven Design ~\cite{evans.2003}. All these approaches, however, call for discipline during development. A microserver, on the other hand, is not organized around technology but a business need. For example, the hands-on part of this paper deals with a service for generating a PDF document. A team working on a microservice, therefore, needs to be cross-functional and therefore avoids organizational barriers.
 
 
@@ -60,15 +66,15 @@ Amazon's "You build it, you run it" methodology is an excellent example of the a
 
 Decentralized data management is likely the single biggest challenge with service-oriented architectures. Monoliths use a single database for the entire application, which makes data management easy. Microservices can also share a single database that would avoid the problem of having to save data in a distributed way or sync data across multiple databases, see figure \ref{fig:decentralised-data}. So why should microservices manage distributed data? The answer is encapsulation, which is a term in computer science, essentially saying that one component should handle all of its concerns internally, and another component should not know about them ~\cite{krivtsov.2019}.
 
-Say there are two microservices, a user service and an order service. Each order is associated with one user who made the order. If both services have their database, then the order service saves the user ID in its database. If a request asks for an order bundled with the user information, then the order service has to make a request of its own to the user service to get the user information in the first place before it can bundle it with its order and send out the answer. If the user service is not available, the order service can not finish the request. Now both services access the same database, and the order service no longer needs the user service because it can merely get into the database and get the user information itself. However, this would mean that the order service knows about the internal affairs of the user service. It knows, for example, how the user table looks like. Now the two services are coupled. If a change is made to the user service, the order service also has to be adjusted. This would effectively undo the benefit of using microservices in the first place and introduce all the challenges of large monoliths into the service-oriented architecture.
-
-\begin{figure}[ht]
+\begin{figure}[ht!]
   \centering
   \includegraphics[width=0.7\linewidth]{assets/decentralised-data.png}
   \caption{Data management of monoliths and microservices}
   \source{https://www.martinfowler.com/articles/microservices.html}
   \label{fig:decentralised-data}
 \end{figure}
+
+Say there are two microservices, a user service and an order service. Each order is associated with one user who made the order. If both services have their database, then the order service saves the user ID in its database. If a request asks for an order bundled with the user information, then the order service has to make a request of its own to the user service to get the user information in the first place before it can bundle it with its order and send out the answer. If the user service is not available, the order service can not finish the request. Now both services access the same database, and the order service no longer needs the user service because it can merely get into the database and get the user information itself. However, this would mean that the order service knows about the internal affairs of the user service. It knows, for example, how the user table looks like. Now the two services are coupled. If a change is made to the user service, the order service also has to be adjusted. This would effectively undo the benefit of using microservices in the first place and introduce all the challenges of large monoliths into the service-oriented architecture.
 
 Decentralized data management is the main reason why microservice architectures are not the golden bullet solution. Although the benefits of microservices outweigh monolith architectures in the long run, there is a consensus among developers that it is better to start with a monolith. Then refactor to microservices later "if you really need them in the future." ~\cite{krivtsov.2019}
 
@@ -92,7 +98,7 @@ Meanwhile, the internet became robust and fast enough to support decentralized c
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.3\linewidth]{assets/illustration-microservice-cd.png}
+  \includegraphics[width=0.4\linewidth]{assets/illustration-microservice-cd.png}
   \caption{Continuous Deployment, short CD}
 \end{figure}
 
@@ -124,7 +130,7 @@ In a monolith system, change cycles are tied together. Meaning if one part of th
 
 Microservices are simplifying the deployment process considerably because they physically separate individual parts of the application from one another. Meaning one service can deploy changes in isolation. Testing becomes an almost trivial task since the scope is naturally limited, and side effects are virtually non-existent. Additionally, a new feature can deploy directly to production as new features don't have to be bundled any more for the sake of testing. It means with microservices deployment is cheap and can often occur, bringing release cycles down to weeks or even days.
 
-However, there are also new complications. If the API of a service changes, it does directly influence other services. The solution here is to version the API and support both old and new in parallel until all other services have migrated. In turn, if a new feature depends upon a new API of another service, the release has to be postponed until the API is available or deployed behind a feature switch/footnote{A feature switch is a true/false value. They can turn a feature off or on at any given time without the need to redeploy the entire application}.
+However, there are also new complications. If the API of a service changes, it does directly influence other services. The solution here is to version the API and support both old and new in parallel until all other services have migrated. In turn, if a new feature depends upon a new API of another service, the release has to be postponed until the API is available or deployed behind a feature switch\footnote{A feature switch is a true/false value. They can turn a feature off or on at any given time without the need to redeploy the entire application}.
 
 
 \subsection{Boundaries are clear}
@@ -167,12 +173,6 @@ Only a microservice architecture enables such granular scaling. On the other han
 
 Distributed governance means that each team can choose the tool that fits their problem best. With monoliths, there is always a technology lock-in for the programming language and even frameworks and libraries. Microservices avoid this limitation by design. If, for example, the default technology stack for a software project is Java, but one service is using a machine learning model, this service can be written in Python for which more machine learning libraries are available.
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.4\linewidth]{assets/illustration-monolith-hammer.png}
-  \caption{Not every problem is a nail}
-\end{figure}
-
 There is but one catch, in the real world product managers don't like to employ new people but want to rely on existing skills. If teams change, it is essential for them that new team members can hit the ground running, which is easier if services use similar technologies. But even then, the flexibility to pick and choose libraries and frameworks best suited to the task is a massive win for the developer. The most significant time sink is usually legacy code and old dependencies, which can't be updated because some arcane part of the codebase is still using an outdated method. Microservices isolate such problems and speed up development.
 
 
@@ -190,6 +190,38 @@ There is but one catch, in the real world product managers don't like to employ 
 \begin{itemize}
   \item \todo{How to make a cut in a big application (monolith)}
 \end{itemize}
+
+\subsection{Justify Business Value}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.3\linewidth]{assets/illustration-business-values.png}
+  \caption{Justify the business value of a microservice}
+\end{figure}
+
+\subsection{Define Boundaries}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.4\linewidth]{assets/illustration-monolith-boundaries.png}
+  \caption{Define the boundaries that already exist insice the monolith}
+\end{figure}
+
+\subsection{Design API}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.55\linewidth]{assets/illustration-microservice-api.png}
+  \caption{Good API documentation is key}
+\end{figure}
+
+\subsection{Develop Software}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.2\linewidth]{assets/illustration-microservice-development.png}
+  \caption{The development of a microservice is the easiest part}
+\end{figure}
 
 
 \section{Challenges of implementing a microservice}
