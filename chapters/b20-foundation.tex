@@ -9,6 +9,9 @@
 \end{figure}
 
 
+%%
+%% What is a monolith?
+%%
 \section{What is a monolith?}
 
 Before defining a microservice, it is advisable to understand what a monolith is since we are going to use them as a comparison. A monolithic is an "application built as a single unit" ~\cite{microservices.2014}. Enterprise applications are built with a single code base that is maintained in one place by a team or several teams, all working on that one application. Three horizontal layers often separate these applications, the data persistence layer, or database, the server, and the client. The cuts for these layers run along technological boundaries instead of boundaries related to business domains. A business domain is, for example, a part of a software that takes care of user management, another domain may be concerned with all payment-related parts of the application. A layer, however, groups all part of an application that uses the same technology, for example, Java as the server-side language.
@@ -16,8 +19,12 @@ Before defining a microservice, it is advisable to understand what a monolith is
 The term "monolith" describing an extensive system derives from the Unix community, which uses the term to describe systems that became too big ~\cite{raymond.2003}. When the term is used in literature or conversation, it usually describes a system that has grown very large over time and is very unwieldy for developers to work with. The development of monolith systems tends to be slow, and maintenance is high. Such systems are widespread in the industry and usually so big that several developer teams are needed to keep them running. Because a monolith is a single unit, it is very natural for its programming code to become tightly coupled between its various modules. This has the effect that programmers need more time to understand relationships inside the code than actually writing new code. Developers do not favor large applications of this type.
 
 
-\section{What is a microservice?}
 
+%%
+%% What is a microservice?
+%%
+\section{What is a microservice?}
+\label{sec:theory:what}
 
 \begin{itemize}
   \item \done{General definition and how it works}
@@ -36,6 +43,7 @@ Changes in one part of an application that consists of components only take effe
 
 
 \subsection{Organized around Business Capabilities}
+\label{sec:theory:what:capabilities}
 
 In his excellent article about microservices ~\cite{microservices.2014} Martin Fowler mentions Conway's Law ~\cite{conway.1968} in regards to large applications. The law states that "any organization that designs a system [...] will inevitably produce a design whose structure is a copy of the organization's communication structure." An organization's structure for software projects often groups different technologies into layers, which leads to different teams skilled for different tasks. An example may be the backend team and the frontend team. Working cross team is usually accompanied by some red tape like budget approvals leading to teams optimizing to solve problems internally. This leads to business logic ending up in places of the system where it shouldn't.
 
@@ -79,7 +87,11 @@ Say there are two microservices, a user service and an order service. Each order
 Decentralized data management is the main reason why microservice architectures are not the golden bullet solution. Although the benefits of microservices outweigh monolith architectures in the long run, there is a consensus among developers that it is better to start with a monolith. Then refactor to microservices later "if you really need them in the future." ~\cite{krivtsov.2019}
 
 
+%%
+%% Why are microservices currently interesting?
+%%
 \section{Why are microservices currently interesting?}
+\label{sec:theory:interesting}
 
 \begin{itemize}
   \item \done{Application development until now with monoliths \& waterfall}
@@ -113,6 +125,10 @@ Before we come to the topic of microservices, we want to look at one more innova
 Once we reach this point, it is easy to connect the dots from third-party SaaS products to an individual application itself running as a cluster of services. In the end, the appeal for companies to break up monolith systems into service-oriented architectures lies in the idea of hiding the complexity of software behind an API\footnote{Application Processing Interface – a way to tell a service to do a specific task or request particular set of data} and looking at it as a business process ~\cite[p.~359]{melzer.2010}. A microservice essentially becomes a black box. The development team takes care that the service works and is at liberty to decide how to solve problems. To everyone else, the service represents an API that they can use to solve their issues.
 
 
+
+%%
+%% Which problem does a microservice solve?
+%%
 \section{Which problem does a microservice solve?}
 \label{sec:theory:what-problem}
 
@@ -176,54 +192,9 @@ Distributed governance means that each team can choose the tool that fits their 
 There is but one catch, in the real world product managers don't like to employ new people but want to rely on existing skills. If teams change, it is essential for them that new team members can hit the ground running, which is easier if services use similar technologies. But even then, the flexibility to pick and choose libraries and frameworks best suited to the task is a massive win for the developer. The most significant time sink is usually legacy code and old dependencies, which can't be updated because some arcane part of the codebase is still using an outdated method. Microservices isolate such problems and speed up development.
 
 
-\section{When does a microservice make sense?}
-
-\begin{itemize}
-  \item \todo{What type of application are microservices best suited for? (Scallable, defined scope)}
-  \item \todo{Good size of a team for a microservice}
-  \item \todo{When not to use distributed service architecture}
-\end{itemize}
-
-
-\section{How to extract a microservice?}
-
-\begin{itemize}
-  \item \todo{How to make a cut in a big application (monolith)}
-\end{itemize}
-
-\subsection{Justify Business Value}
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.3\linewidth]{assets/illustration-business-values.png}
-  \caption{Justify the business value of a microservice}
-\end{figure}
-
-\subsection{Define Boundaries}
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.4\linewidth]{assets/illustration-monolith-boundaries.png}
-  \caption{Define the boundaries that already exist insice the monolith}
-\end{figure}
-
-\subsection{Design API}
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.55\linewidth]{assets/illustration-microservice-api.png}
-  \caption{Good API documentation is key}
-\end{figure}
-
-\subsection{Develop Software}
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.2\linewidth]{assets/illustration-microservice-development.png}
-  \caption{The development of a microservice is the easiest part}
-\end{figure}
-
-
+%%
+%% Challenges of implementing a microservice
+%%
 \section{Challenges of implementing a microservice}
 
 \begin{itemize}
@@ -235,6 +206,7 @@ There are three main challenges with the architectural style of microservices th
 
 
 \subsection{Decentralized Data}
+\label{sec:theory:challenges:data}
 
 The probably greatest challenge with microservices is decentralized data management. As already noted in the section on page \pageref{sec:theory:decentralized-data}, it is unavoidable with microservices to have distributed databases. The challenge for the developers is to design the system, such as not to create data duplication. For example, almost every service usually needs access to user data. Think of an order or a shopping cart; it always has an assigned to a user. In monoliths, it is comparatively cheap to greedily query the database for the respective object together with its user. In a microservice environment, this cannot be done on the database level. Instead, the program iterates over all objects and request each user with an expensive API call from another service. There are solutions to parallelize these requests, which reduces the time for such operations tremendously. An example in JavaScript is the \inlinecode{Promise.all()} function which can handle parallel asynchronous calls in arrays ~\cite{mdn.2020}. But the better architectural ideal is to avoid them altogether.
 
@@ -260,6 +232,7 @@ An great example is the YouTube view counter. It is essential for YouTube to hav
 
 
 \subsection{Disciplined Communication}
+\label{sec:theory:challenges:communication}
 
 Inside a monolith, the individual components can call each other's methods to get information or trigger tasks. Because method calls are cheap, it doesn't matter very much how many method calls a specific task needs to make. It is also comparatively easy to understand other methods or even to add new ones as required.
 
@@ -273,6 +246,7 @@ A microservice is essentially a black box with a public interface, an API. API c
 
 
 \subsection{Operational Complexity}
+\label{sec:theory:challenges:ops}
 
 Each service is deployed individually and requires its deployment pipeline, staging instance, version control, and error reporting ~\cite{fachat.2019.1}. In other words, the operational part of running and deploying the application is multiplied. Additionally, each service can use different technology, dependencies, and even third-party services. Because services nowadays run in the cloud, every instance is connected to the open internet. Thus authentication layers have to be managed, and services need permissions to call each other APIs and to access their respective databases. A bigger operations team is needed to manage the additional complexity. This point is one of the reasons why new projects should start as microservices and grow into service-oriented architectures as the need arises ~\cite{krivtsov.2019}.
 
@@ -283,6 +257,129 @@ Each service is deployed individually and requires its deployment pipeline, stag
 \end{figure}
 
 
+
+%%
+%% When does a microservice make sense?
+%%
+% \section{When does a microservice make sense?}
+
+% \begin{itemize}
+%   \item \todo{What type of application are microservices best suited for? (Scallable, defined scope)}
+%   \item \todo{Good size of a team for a microservice}
+%   \item \todo{When not to use distributed service architecture}
+% \end{itemize}
+
+
+
+%%
+%% How to extract a microservice from an existing application?
+%%
+\section{How to extract a microservice from an existing application?}
+
+\begin{itemize}
+  \item \done{How to make a cut in a big application (monolith)}
+\end{itemize}
+
+
+\subsection{Justify Business Value}
+
+A developer's time is not free for the company. When planning to extract a microservice from an existing application, the first question the company asks is: "Does this create value?" Why should the company allocate developer time to rewrite a functionality which already exists and is working? What is the additional value created for the company for the time spent creating the new service? It should be sufficiently clear by now that we can not argue with faster development. Yes, developing and extending a single microservice is quicker than building the same feature embedded in a monolith. And in the long-run development of new features as a whole may speed up. But at least in the beginning these gains are offset by the increased complexity\footnote{See page \pageref{sec:theory:challenges:ops}} and the more stringent requirements on data\footnote{See page \pageref{sec:theory:challenges:data}} and communication\footnote{See page \pageref{sec:theory:challenges:communication}}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.3\linewidth]{assets/illustration-business-values.png}
+  \caption{Justify the business value of a microservice}
+\end{figure}
+
+The value chiefly lies in these three points, quicker release cycles, cheaper and easier scalability, and stronger resilience of the application. As already discussed in the section, "Why are microservices currently interesting?" on page \pageref{sec:theory:interesting} quick release cycles are interesting for applications that live in the cloud. They are also attractive to management who can show new features to users quickly. Scalability is the financially most persuasive argument. With growing numbers of users, the savings in infrastructure with services that can scale granularly are exponential.
+
+Stronger resilience is built into the design of microservices if done right. It means that the system can continue to function with delays or even crashes of individual services. The Netflix Simian Army is a compilation of testing scripts like the Latency Monkey, induces artificial delays in a client-server communication, or the Chaos Monkey, randomly disabling production instances ~\cite{netflix.2011}. They have even a tool simulating an entire data center outage in the production environment. It is the stuff of developers' nightmares and in many companies cause for engineering team all-night and weekend shifts. At Netflix, they use these tools to incentive their programmers to build their services resilient in the first place. So if an outage or breakdown happens, other instances or datacenters dynamically scale to carry the load, and the user doesn't even realize anything happened.
+
+
+\subsection{Define Boundaries}
+
+Every monolith of sufficient size has natural boundaries. We want to find these boundaries and define them well enough to make a cut. Great engineering teams organize into smaller teams. For monoliths, teams consist of members with specific technological knowledge like database or backend code. The application reflects these separations in its codebase because developers seek the way of least resistance and try to solve tasks internally. This is an example of Conway's law in action, as quoted earlier\footnote{See page \pageref{sec:theory:what:capabilities}}. Figure \ref{fig:illustration-monolith-layers} shows the typical layer separations of an application. In most cases, there are three layers, the database, backend, and frontend. But there may also be service layers, data access object layers, routing layers, and others. However, when looking for boundaries inside monoliths, we are not looking for horizontal layers.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.4\linewidth]{assets/illustration-monolith-layers.png}
+  \caption{Applications are usually divided by horizontal layers}
+  \label{fig:illustration-monolith-layers}
+\end{figure}
+
+We are concerned with vertical boundaries that separate a monolith along business domain boundaries. Within the team, there are very likely already efforts to separate components of the code by business domains and to couple them as loosely as possible. There are always heavily coupled spaghetti code components and reasonably well-defined fringe components with only one or two dependencies. These loosely coupled, distinct components are our first target. Find the low-hanging fruit among the existing boundaries and start from there.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.4\linewidth]{assets/illustration-monolith-boundaries.png}
+  \caption{Look for boundaries that already exist inside the monolith}
+\end{figure}
+
+Capgemini assigned me that task to exactly such a component. This part of the monolith is responsible for creating a printable PDF from a dataset passed to it. It is, if you will, the textbook example for a microservice because it was comparatively loosely coupled and very well defined. Chapter \ref{sec:arch} explains in more detail how I investigated and defined the boundaries of this specific component and then decided about the cuts.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.4\linewidth]{assets/illustration-monolith-printer.png}
+  \caption{One component inside the monolith is responsible for generating PDFs}
+\end{figure}
+
+Having defined the cuts for the first component, work yourself through the monolith incrementally. Note that it usually makes more sense to finish extracting one service before moving on to the next to take into account the learnings and changes from the process itself. In the ideal world, you could split up the monolith into equal parts, just like a pizza. In reality, their services differ vastly in size, and usually, there is one central service one cannot further reduce into smaller parts. As a guide, we can consider Jeff Bezos's "Two-Pizza rule," which says to keep teams and projects manageable, each team should not exceed the number of members two pizzas can feed ~\cite{hern.2018}. Ideally, no more than one team owns and runs a microservice, which gives us a good pointer for the maximum size of a microservice.
+
+
+\subsection{Design API}
+
+A comprehensive API documentation is addressing the challenge from page \pageref{sec:theory:challenges:communication} for "Disciplined Communication." A microservice is treated as a black box by other services because they should not know its inner workings. The only thing other services can and should know is how the public interface works. There are different ways services can communicate with one another. However, the primary way is through HTTP requests. Among HTTP requests, there are different conventions; this paper treats only the REST API convention because it is the most common standard to date.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.55\linewidth]{assets/illustration-microservice-api.png}
+  \caption{Good API documentation is key}
+\end{figure}
+
+REST stand for "Representational State Transfer" ~\cite{rest.2020}. A REST API follows three simple principles. It uses HTTP verbs like GET, POST, or DELETE to denote the action of the current request. It targets a resource with the URL of the request. For example, \inlinecode{/users/123} would target the user with ID \inlinecode{123}. And it uses status codes to respond to these requests so that machines can make sense from the response. For example, if the server responds with status code 200, it means the request was successful; if it responds with 404, it means that it couldn't find the resource, maybe because the user ID doesn't exist. An example HTTP request following the REST convention is \inlinecode{GET https://dog.ceo/api/breed/germanshepherd/images/random}, this requests a random image of from the \inlinecode{dog.ceo} API of the breed "German Shepherd." It is straightforward to try out any API by just pasting the URL into the browser address bar, see figure \ref{fig:dog-api}. The browser always performs a GET request by default.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.75\linewidth}
+    \includegraphics[width=\linewidth]{assets/dog-api-request.jpg}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.75\linewidth}
+    \includegraphics[width=\linewidth]{assets/dog-api-image.jpg}
+  \end{subfigure}
+  \caption{Simple request to the dog.ceo API for a random German Shepherd}
+  \label{fig:dog-api}
+\end{figure}
+
+Because the API is the only publicly accessible part of the application, it must be well documented. Meaning the documentation is complete, other teams know where to find it, and it lives with the application and doesn't become outdated. Nothing is more useless than documentation that is not up to date. For this reason, Swagger\footnote{See https://swagger.io/}, now in its third version called OpenAPI, is an excellent tool because it combines a standardized documentation format with an automatically generated webpage that is easy to use. And it is even possible to generate automatic code scaffolding from this documentation file; this way, the documentation becomes part of the development, which guarantees that it stays up to date.
+
+While documentation is essential, the design of the API is no less important. The design here means to choose the right HTTP verbs and reasonable resource paths. Let's take a user resource as an example. It should be possible to request a list of all users, one specific user by its identifier and, let's say, all the orders a user made. Additionally, a list of all orders can be requested and again a single order by its identifier. The API routes would look something like this:
+
+\begin{lstlisting}
+/users                 -> get all users
+/users/{userId}        -> get one user by userId
+/users/{userId}/orders -> get all orders of one user by userId
+/orders                -> get all orders
+/order/{orderId}       -> get one order by oderId
+\end{lstlisting}
+
+It is also possible to define a route \inlinecode{/users/{userId}/orders/{orderId}}, but it's an unnecessary requirement to provide the userId if the oderId perfectly identifies an order. Chapter \ref{sec:impl:api} on page \pageref{sec:impl:api} looks at API design from the perspective of the practical implementation of the CEMicro service.
+
+
+\subsection{Develop Software}
+
+After the crucial steps of justifying the business value, defining the boundaries, and designing the API of the new microservice, all the hard steps are taken. The last step is that of implementing the service itself. There are, of course, still decisions to be made like the choice of language, framework, and libraries. But because the boundaries are now well defined and with the API, it is clear what behavior is expected, the actual development is comparatively easy. Chapter \ref{sec:impl} of this paper deals at length with the minutia of the implementation of CEMicro.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.2\linewidth]{assets/illustration-microservice-development.png}
+  \caption{The development of a microservice is the easiest part}
+\end{figure}
+
+
+
+%%
+%% Warp-up
+%%
 \section{Warp-up}
 
 \todo{Warp-up}
