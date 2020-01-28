@@ -1,6 +1,7 @@
 \chapter{Theoretical Foundation}
 \label{sec:theory}
 
+A monolith is an application that has grown too big. In contrast, a microservice is just a part of a broader application that runs independently and communicates with the other parts to make a whole. Microservices are of interest today because they enable applications to scale and deploy quickly. The idea of scaling goes along with cloud computing, the idea that an application lives on remote servers and is accessed by simple clients. All this comes with the challenge of more sophisticated infrastructure and the need to manage distributed data. Therefore it is not recommended to start with a service-oriented architecture, but to destructure software on the go as scaling becomes necessary.
 
 \begin{figure}[ht]
   \centering
@@ -362,7 +363,7 @@ While documentation is essential, the design of the API is no less important. Th
 /order/{orderId}       -> get one order by oderId
 \end{lstlisting}
 
-It is also possible to define a route \inlinecode{/users/{userId}/orders/{orderId}}, but it's an unnecessary requirement to provide the userId if the oderId perfectly identifies an order. Chapter \ref{sec:impl:api} on page \pageref{sec:impl:api} looks at API design from the perspective of the practical implementation of the CEMicro service.
+It is also possible to define a route \inlinecode{/users/{userId}/orders/{orderId}}, but it's an unnecessary requirement to provide the userId if the oderId perfectly identifies an order. Chapter \ref{sec:impl:api} on page \pageref{sec:impl:api} looks at API design from the perspective of the practical implementation of the CEMicro\footnote{CEMicro is the name of the microservice the author developed as the practical part of this thesis} service.
 
 
 \subsection{Develop Software}
@@ -382,4 +383,9 @@ After the crucial steps of justifying the business value, defining the boundarie
 %%
 \section{Warp-up}
 
-\todo{Warp-up}
+It is incorrect that there is a right or wrong way to design a system. A monolith doesn't need destructuring into services because it is the wrong architecture, but because the requirements outgrew its benefits. Once the concept is understood, and the monolith mapped out the actual work of cutting out microservices is not even that difficult. It turns out that understanding the boundaries and interfaces is the main work, part of it is, of course, the decision to which domain the data belongs. The conversation about implementation details and future possibilities takes up steam as soon as boundaries are easy to grasp.
+
+I made this experience when demonstrating CEMicro to the project manager of the POS\footnote{POS is the short name of the point of sales application the department developed where I worked at Capgemini} project at Capgemini. The concept of configurable elements, the primary domain of CEMicro, is not easy to understand because it has many moving parts. However, once all present at the presentation caught a glimpse of the CEMicro design, that is, the user interface, the API, and the context diagram, immediately a healthy discussion commenced about specific pros and cons, better implementation details, and future possibilities. Rather than seeing this discussion as a critique, I was pleased to see that this complexity was suddenly so easy to grasp for everybody. I consider this a successful outcome of my work even if the result only represents a proof of concept.
+
+
+
