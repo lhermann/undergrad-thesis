@@ -5,14 +5,35 @@
 \section{Setting up the Development Environment}
 
 \begin{itemize}
-  \item \todo{Visual Studio Code (code editor) https://code.visualstudio.com/}
-  \item \todo{Git (version control) https://git-scm.com/}
-  \item \todo{Virtualisation with Docker}
-  \item \todo{Node.js}
-  \item \todo{Challenge: Setting up git/bash on windows}
-  \item \todo{Challenge: File permissions for docker on windows}
+  \item \done{Visual Studio Code (code editor) https://code.visualstudio.com/}
+  \item \done{Git (version control) https://git-scm.com/}
+  \item \done{Virtualisation with Docker}
+  \item \done{Node.js}
+  \item \done{Challenge: Setting up git/bash on windows}
+  \item \done{Challenge: File permissions for docker on windows}
 \end{itemize}
 
+It seems trivial to treat the development environment in this chapter, but that would be a disservice to any programmer. The development environment is an essential part of writing an application and can be as much of a time sink as software bugs, as we will see. I am used to developing on a Mac operating system. Mac is based on Unix and offers a built-in Bash shell, basically just like any Linux machine, while Windows uses an entirely different foundation for its operating system. All the technologies which work with cloud computing and distributed services operate on Linux systems because the internet runs on Linux\footnote{Yeah, sorry Microsoft}. We are talking about technologies like Git version control, Docker container virtualization, and Node.js and its packet manager NPM. The machine Capgemini provided me with is a Windows computer.
+
+I first set up Visual Studio Code, currently the most popular code editor, especially among web developers and developed by Microsoft ~\cite{stackoverflow.2019}. Next, I set up git\footnote{https://git-scm.com/downloads}, which comes with a complete Bash environment, howbeit with a reduced feature set. Bash stands for "Bourne Again Shell" and is a variation of the default Unix shell, a command-line interface. An average user usually never uses the command line but interacts with generated user interfaces (GUI) of a program. In a shell, the user can interact with programs by typing one-line commands. For example, \inlinecode{rm -rf test-dir/} instructs the simple 'remove' program to delete the 'test-dir' folder with all its content. This way of using programs is handy for programmers and system administrators in their work, especially if running commands on remote computers through SSH\footnote{secure shell} sessions.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.75\linewidth]{assets/example-bash-window.jpg}
+  \caption{Example for a bash terminal executing the 'ps' command}
+\end{figure}
+
+Because I planned to write the entire application in JavaScript, I set up a Node.js environment\footnote{https://nodejs.org/}. JavaScript is an interpreted language; it means that the code does not need to compile to machine code like Java, for example, but the Node runtime reads the JavaScript file and translates it for the computer on the fly. It means that I can start a program by simply typing \inlinecode{node main.js} into the shell, which then executes the contents of main.js. Furthermore, I can install a JavaScript tool like Nodemon\footnote{https://www.npmjs.com/package/nodemon} with \inlinecode{npm install nodemon} that watches the JS\footnote{JS is short for JavaScript} files on my systems and restarts the application whenever I change the file. This provides instant feedback, in the form of an updated application or error messages, and makes development comfortable.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=1\linewidth]{assets/terminal-docker-ps.png}
+  \caption{'docker ps' shows all running docker containers}
+\end{figure}
+
+Docker\footnote{https://www.docker.com} is a tool that can run the software in a container. A container is like an application that brings its entire ecosystem with it, howbeit a very simplified one, so that it doesn't become too large. This application then runs in isolation for anything else on the host system. This is very useful because it allows the developer to run dependencies like databases or other services for an application without the hassle of installing them on the system manually and the difficulty of handling different versions. For the development of CEMicro, I ran my PostgreSQL database in a docker container. I also needed a running instance of the Docify service, itself a combination of six containers, which I downloaded and started in Docker. The \inlinecode{docker-compose} command provides a very convenient way to start all required containers for an entire application at once. These containers then run in the background, and the developer can concentrate on his current code.
+
+One challenge I faced with setting up bash on windows was the limited way in which the shell environment of the git application works. Familiar commands and shell setups on Unix machines were not available under the Windows environment, and it took me a while to work around this limitation. Another problem arose with Docker in that it works with Unix file system permissions. On a Unix system, every file has a set of nine permissions, read, write and execute separate for the user, the group and others\footnote{The details about Unix file permissions go beyond this chapter, for more info see https://www.tutorialspoint.com/unix/unix-file-permission.htm}, this system is part of the hard drive format and OS kernel\footnote{A kernel is the bottom-most layer of an operating system}. Windows does not have any file system permissions; it's not part of the operating system. Instead, Windows handles users and groups with dedicated services, and this is also the reason why there are so many more worms and viruses for Windows. The Docker environment for Windows fakes those permissions. But for specific requirements, for example, when using Docker volumes, these permissions need to be changed to work. It is possible to do this, but I couldn't find out how and I assume it has to do with a user management service, which is not accessible under the closed business setup of the machine Capgemini gave me. It, therefore, took me a while to find a workaround for Docker volumes so that they only exist within the virtual environment and don't come in contact with the Windows host.
 
 \section{Application Programming Interfaces}
 \label{sec:impl:api}
@@ -24,6 +45,12 @@
   \item \todo{Discarded: Saving Templates in CEMicro (see single source of truth page)}
   \item \todo{Discarded: swagger-tools}
 \end{itemize}
+
+The CEMicro deals with three different objects.
+
+One important concept is the single source of truth, meaning that one piece of Information is only saved in one place. This is especially important when working with microservices and other concepts of distributed architectures. Since the services and thus the programming logic are distributed, information, by necessity, also needs to be distributed. However, as just established, we do not want duplication of information. Thus, with microservice architectures one piece of information should only exist inside a single microservice.
+
+CEMicro solves this the single source of truth principle by requesting templates on the fly from the docify service and only saving configurable elements and their items in its own database.
 
 \begin{figure}
   \centering
