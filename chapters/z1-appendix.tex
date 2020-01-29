@@ -1,4 +1,209 @@
 \chapter{Appendix}
 \label{sec:appendix}
 
-Alles was den Hauptteil unnötig vergrößert hätte, z. B. HW-/SW-Dokumentationen, Bedienungsanleitungen, Code-Listings, Diagramme
+This is an excerpt of the \inlinecode{openapi.yml} file, the authoritative and living API documentation for CEMicro.
+
+\begin{lstlisting}
+openapi: 3.0.1
+info:
+  title: CEMicro
+  version: '1.0'
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  contact:
+    name: Capgemini
+    url: 'https://www.capgemini.com/...'
+  description: OpenAPI v2 (Swagger) file representing the CEMicro API
+servers:
+  - url: 'https://localhost:3001/api/v1'
+    description: Current Environment
+  - url: 'https://cemicro.example.com/api/v1'
+    description: Staging Environment
+paths:
+  /templates:
+    get:
+      summary: Get a list of template abstracts
+      tags:
+        - Templates
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TemplateAbstract'
+              examples:
+                Example:
+                  value:
+                    - id: 1
+                      client: pos
+                      market: fr
+                      documentname: finance
+                      version: '(1,0,productive)'
+                    - id: 2
+                      client: pos
+                      market: fr
+                      documentname: new_offer_pkw
+                      version: '(1,0,productive)'
+                    - id: 3
+                      client: pos
+                      market: fr
+                      documentname: new_preface_pkw
+                      version: '(1,0,productive)'
+        '401':
+          description: Unauthorized
+      operationId: get-templates
+      description: 'Returns a list of TemplateAbstracts for every market.'
+  [...]
+components:
+  schemas:
+    TemplateAbstract:
+      title: TemplateAbstract
+      type: object
+      x-examples:
+        example:
+          market: nl
+          documentname: new_offer_pkw
+          version: '(1,0,productive)'
+      properties:
+        market:
+          type: string
+          example: nl
+        documentname:
+          type: string
+          example: new_offer_pkw
+        version:
+          type: string
+          example: '(1,0,productive)'
+      description: A simplified template object without the html string
+    Template:
+      title: Template
+      type: object
+      x-examples:
+        example:
+          market: nl
+          template: '<!DOCTYPE html><htm>...</html>,'
+          examplejson: {}
+          name: new_offer_pkw
+      properties:
+        market:
+          type: string
+          example: nl
+        template:
+          type: string
+          example: '<!DOCTYPE html><html>...</html>'
+        examplejson:
+          type: object
+          example: {}
+        name:
+          type: string
+          example: new_offer_pkw
+      description: The full template object with the HTML string
+    Element:
+      title: Element
+      type: object
+      description: 'A configurable element. Unique by `name`, `template` and `market`. Contains a list of all `ElementItem`s. The `activeValue` is the `ElementItem.value` that  best represents the query parameters. If no `ElementItem` is applicable or if no parameters were given, the `activeValue` will be identical to the `defaultValue`.'
+      properties:
+        id:
+          type: integer
+          example: 1
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ElementItem'
+        template:
+          type: string
+          example: new_offer_pkw
+        market:
+          type: string
+          example: nl
+        name:
+          type: string
+          example: tbDealerName
+        defaultValue:
+          type: string
+          example: Mercedes Benz Default Retailer
+        activeValue:
+          type: string
+          example: Mercedes Benz Gaildorf
+      required:
+        - template
+        - market
+        - name
+        - defaultValue
+    ElementItem:
+      title: ElementItem
+      type: object
+      description: 'A child of a configurable element, it contains a value and a set of conditions. The `ElementItem` which fits the given parameters best will be the one used by `Element` as `activeValue`.'
+      properties:
+        id:
+          type: integer
+          example: 1
+        order:
+          type: integer
+          example: 1
+        language:
+          type: string
+          example: English
+        vehicleType:
+          type: string
+          example: New Vehicle
+        division:
+          type: string
+          example: MB Passenger Car
+        brand:
+          type: string
+          example: Mercedes Benz
+        paperType:
+          type: string
+          example: Branded
+        validFrom:
+          type: string
+          example: '2018-11-29T12:14:30.966Z'
+        validUntil:
+          type: string
+          example: '2022-03-13T12:14:30.966Z'
+        value:
+          type: string
+          example: Mercedes Benz Gaildorf
+      required:
+        - value
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+  parameters:
+    market:
+      name: market
+      in: path
+      description: MB code of the market
+      required: true
+      schema:
+        type: string
+        pattern: '^[a-z]{1,4}$'
+      example: nl
+    template_name:
+      name: name
+      in: path
+      description: The name of the template
+      required: true
+      schema:
+        type: string
+        pattern: '^[a-z.-_]+$'
+      example: new_offer_pkw
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
+tags:
+  - name: Templates
+    description: Docify templates
+  - name: Configurable Elements
+    description: Elements unique per Docify template
+  - name: Configurable Element Items
+    description: ElementItems defining the `activeValue` of Elements depending on the query
+\end{lstlisting}
