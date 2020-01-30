@@ -166,8 +166,48 @@ I also made sure the frontend looks almost identical to Docify so it can be merg
 \section{Virtualisation with Docker}
 
 \begin{itemize}
-  \item \todo{install packages, build, prune packages}
+  \item \done{install packages, build, prune packages}
 \end{itemize}
+
+If an application is packaged with Docker, then starting the application on a new machine is a breeze. PostgreSQL uses an official predefined Docker image, which works with minimal configuration, in this case, only a few environment variables. Both the backend and frontend use the official Node.js image. Only the image is not enough in this case because the programming code has to go into the container as well. One way to do that is with so-called volumes. A volume is a directory existing on the local machine and in the docker container at the same time. This arrangement is beneficial when using Docker during development but not for running it in production. I didn't use Docker during development because it tends to be a little slow. After all, the Docker volume has to sync the filesystem between the host and its virtual machine. Instead, I am running the application right on my system with my Node.js runtime, which is significantly faster. But for the production build, I want to have everything inside the container. To achieve this, we add a Dockerfile to the application, using the Node.js image as a foundation and building upon it with our code.
+
+For example, here is the Dockerfile for the backend:
+
+\begin{lstlisting}[belowskip=-1]
+FROM node:12-alpine
+
+WORKDIR /var/app
+
+COPY --chown=node:node . .
+
+RUN npm install --production
+
+ENV SERVICE_HOST=192.168.99.100
+ENV SERVICE_PORT=3000
+ENV NODE_ENV=production
+ENV DB_HOST=db
+ENV DB_USER=cemicro
+ENV DB_PASS=123456
+ENV DB_PORT=5432
+
+EXPOSE 3000
+
+USER node
+
+CMD ./node_modules/.bin/sequelize db:migrate && npm run production
+\end{lstlisting}
+
+We can see that it uses the \inlinecode{node:12-alpine} image as a foundation, copies the files from the backend into the new image, and installs all NPM dependencies. It then defines some environment variables and instructs the container to run a set of commands when on start. An "image" in Docker language is like a blueprint, and a "container" takes that blueprint and creates a live instance from it. Multiple containers can be created from one image.
+
+The backend is particularly simple because it doesn't require any build step; the code is just copied and executed directly. The frontend, however, posed an interesting challenge because a build step is required. The frontend is made up of special \inlinecode{.vue} component files which cannot be executed directly. First, we have to transform them into valid HTML, CSS, and JavaScript files during a build process. But to keep the image as small as possible, all the code that was only required for the build needs to be removed before finishing the Docker image. It turns out that NPm provides a command to "prune" development code from the filesystem after the build, here is the relevant excerpt of the frontend Dockerfile:
+
+\begin{lstlisting}
+RUN npm install
+RUN npm run build
+RUN npm prune --production
+\end{lstlisting}
+
+And with that, the containerization of the CEMicro application is complete. Not the single command \inlinecode{docker-compose up} takes care of building and starting all three parts of the application, including running the migrations for a new database, and it is then usable through the browser.
 
 
 \section{Interfacing with the monolith development team}
