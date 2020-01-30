@@ -1,6 +1,128 @@
 \chapter{Appendix}
 \label{sec:appendix}
 
+\section{Excerpt of the Controller, Service and Model for an Element}
+\label{sec:appendix:mvcs}
+
+\subsection{controllers/ElementCtrl.js}
+
+\begin{lstlisting}[language=JavaScript]
+'use strict';
+
+const { param, query, body, validationResult, matchedData } = require('express-validator');
+const ElementService = require('../service/ElementService');
+
+const validators = {
+  id: param('id', 'must be in integer').isInt().toInt(),
+  market: query('market', 'can only contain between 1 and 4 lowercase letters').matches(/^[a-z]{1,4}$/),
+  template: query('template', 'must be a string').isString(),
+  language: query('language', 'must be a string').isString(),
+  vehicleType: query('vehicleType', 'must be a string').isString(),
+  division: query('division', 'must be a string').isString(),
+  brand: query('brand', 'must be a string').isString(),
+  paperType: query('paperType', 'must be a string').isString(),
+  defaultValue: body('defaultValue', 'must be a string').isString(),
+}
+
+// [...]
+
+async function putElementById (req, res, next) {
+  // validation
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(422).json(errors);
+
+  // get data
+  const id = req.params['id']
+  const body = matchedData(req, { locations: ['body'] })
+
+  try {
+    res.json(await ElementService.updateElementById(id, body))
+  } catch(error) {
+    console.log(error)
+    res.status(error.status || 400).send(error.message)
+  };
+};
+
+module.exports = {
+  validators,
+  getElements,
+  getElementById,
+  putElementById,
+}
+\end{lstlisting}
+
+\subsection{services/ElementService.js}
+
+\begin{lstlisting}[language=JavaScript]
+'use strict';
+
+const models = require('../models');
+const _uniq = require('lodash/uniq')
+const _xor = require('lodash/xor')
+
+// [...]
+
+/**
+ * Put Element by id
+ *
+ * @param {String} id
+ * @returns {Object} Element
+ **/
+async function updateElementById (id, body) {
+
+  const result = await models.Element.update(
+    body,
+    {
+      where: { id },
+      returning: true
+    }
+  )
+
+  if (result[0] === 0) {
+    const error = new Error(`Element with id ${id} not found`)
+    error.status = 404
+    throw error
+  } else {
+    return result[1][0]
+  }
+}
+
+module.exports = {
+  getElements,
+  getElementById,
+  updateElementById,
+}
+\end{lstlisting}
+
+\subsection{models/Element.js}
+
+\begin{lstlisting}[language=JavaScript]
+'use strict';
+
+module.exports = (sequelize, DataTypes) => {
+  const Element = sequelize.define('Element', {
+    market: { type: DataTypes.STRING, unique: 'unique_per_template' },
+    template: { type: DataTypes.STRING, unique: 'unique_per_template' },
+    name: { type: DataTypes.STRING, unique: 'unique_per_template' },
+    activeValue: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return this.getDataValue('defaultValue')
+      }
+    },
+    defaultValue: { type: DataTypes.TEXT },
+  }, {});
+  Element.associate = function(models) {
+    models.Element.hasMany(models.ElementItem, { as: 'items' });
+  };
+  return Element;
+};
+\end{lstlisting}
+
+
+\section{Excerpt of the OpenAPI file}
+\label{sec:appendix:openapi}
+
 This is an excerpt of the \inlinecode{openapi.yml} file, the authoritative and living API documentation for CEMicro.
 
 \begin{lstlisting}
@@ -21,88 +143,87 @@ servers:
   - url: 'https://cemicro.example.com/api/v1'
     description: Staging Environment
 paths:
-  /templates:
+  [...]
+  '/configurable-elements/{id}':
+    parameters:
+      - schema:
+          type: string
+          default: 2
+        name: id
+        in: path
+        required: true
     get:
-      summary: Get a list of template abstracts
+      summary: Get all Elements by name for the given parameters
       tags:
-        - Templates
+        - Configurable Elements
       responses:
         '200':
           description: OK
-          headers: {}
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TemplateAbstract'
-              examples:
-                Example:
-                  value:
-                    - id: 1
-                      client: pos
-                      market: fr
-                      documentname: finance
-                      version: '(1,0,productive)'
-                    - id: 2
-                      client: pos
-                      market: fr
-                      documentname: new_offer_pkw
-                      version: '(1,0,productive)'
-                    - id: 3
-                      client: pos
-                      market: fr
-                      documentname: new_preface_pkw
-                      version: '(1,0,productive)'
+                  $ref: '#/components/schemas/Element'
         '401':
           description: Unauthorized
-      operationId: get-templates
-      description: 'Returns a list of TemplateAbstracts for every market.'
+        '404':
+          description: Not Found
+      operationId: get-configurable-elements-by-id
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: language
+          description: ''
+        - schema:
+            type: string
+          in: query
+          name: vehicle-type
+        - schema:
+            type: string
+          in: query
+          name: division
+        - schema:
+            type: string
+          in: query
+          name: brand
+        - schema:
+            type: string
+          in: query
+          name: paper-type
+      description: 'Returns a single Element by id. The query parameters are used to determine the `activeValue` which is taken from the `ElementItem` that matches these paramters. If no paramters are given or if no `ElementItem`s fit the criteria, the `activeValue` will be identical to the `defaultValue`.'
+    patch:
+      summary: Update an Element by id
+      operationId: patch-configurable-elements-by-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Element'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                defaultValue:
+                  type: string
+                  example: Hello World
+      tags:
+        - Configurable Elements
   [...]
 components:
   schemas:
-    TemplateAbstract:
-      title: TemplateAbstract
-      type: object
-      x-examples:
-        example:
-          market: nl
-          documentname: new_offer_pkw
-          version: '(1,0,productive)'
-      properties:
-        market:
-          type: string
-          example: nl
-        documentname:
-          type: string
-          example: new_offer_pkw
-        version:
-          type: string
-          example: '(1,0,productive)'
-      description: A simplified template object without the html string
-    Template:
-      title: Template
-      type: object
-      x-examples:
-        example:
-          market: nl
-          template: '<!DOCTYPE html><htm>...</html>,'
-          examplejson: {}
-          name: new_offer_pkw
-      properties:
-        market:
-          type: string
-          example: nl
-        template:
-          type: string
-          example: '<!DOCTYPE html><html>...</html>'
-        examplejson:
-          type: object
-          example: {}
-        name:
-          type: string
-          example: new_offer_pkw
-      description: The full template object with the HTML string
+    [...]
     Element:
       title: Element
       type: object
@@ -135,43 +256,7 @@ components:
         - market
         - name
         - defaultValue
-    ElementItem:
-      title: ElementItem
-      type: object
-      description: 'A child of a configurable element, it contains a value and a set of conditions. The `ElementItem` which fits the given parameters best will be the one used by `Element` as `activeValue`.'
-      properties:
-        id:
-          type: integer
-          example: 1
-        order:
-          type: integer
-          example: 1
-        language:
-          type: string
-          example: English
-        vehicleType:
-          type: string
-          example: New Vehicle
-        division:
-          type: string
-          example: MB Passenger Car
-        brand:
-          type: string
-          example: Mercedes Benz
-        paperType:
-          type: string
-          example: Branded
-        validFrom:
-          type: string
-          example: '2018-11-29T12:14:30.966Z'
-        validUntil:
-          type: string
-          example: '2022-03-13T12:14:30.966Z'
-        value:
-          type: string
-          example: Mercedes Benz Gaildorf
-      required:
-        - value
+    [...]
   securitySchemes:
     api_key:
       type: apiKey

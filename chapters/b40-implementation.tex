@@ -50,7 +50,7 @@ The CEMicro service deals with three different objects\footnote{In programming, 
 
 \begin{table}[!ht]
   \begin{center}
-    \begin{tabular}{|l|l|l|}
+    \begin{tabular}{|l|l|p{6cm}|}
       \hline
       Action & Route & Description \\
       \hline\hline
@@ -94,47 +94,79 @@ Initially, I planned to include templates in the database because it is such an 
 
 Both elements and element items are saved in the CEMicro database and entirely managed by it. It is common to provide CRUD actions for every resource. CRUD stands for CREATE-READ-UPDATE-DELETE, the four principal actions for data. In the table, we can see that element items have all four CRUD operations plus PATCH, which is a partial update function where only a subset of properties has to be provided. Configurable elements, however, do not have four CRUD operations. That's because I decided to create them on the fly. Whenever the user opens a template in the frontend, it requests all the elements from the backend. At that point, the backend parses the template string for a list of all the necessary configurable elements. It then compares this list with the database and creates an element that is missing before returning the complete list of elements to the frontend. This way, the user is saved the hassle of manually creating an element after adding it to the template in Docify. It saved one working step. However, during the debriefing with the project manager, we concluded that it would be better to additionally offer the manual option to the user so he can create and delete elements as needed.
 
-\begin{figure}
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\linewidth]{assets/swagger-api-docs.png}
   \caption{Interactive API documentation with Swagger}
   \label{fig:api-docs}
 \end{figure}
 
-The appendix, page \ref{sec:appendix}, shows an excerpt of the \inlinecode{openapi.yml} file. This file is the authoritative documentation for the API. Swagger\footnote{https://swagger.io}, the open-source project behind the OpenAPI standard, provides tools to generate an interactive documentation page from this file automatically, see figure \ref{fig:api-docs}. Docify uses a library called "swagger-tools" to automatically generate some scaffolding for their code directly from their OpenAPI file. This approach saves some repetitive coding and helps to tie the functional code and the documentation together. For CEMicro, however, I decided to omit this library and add everything by hand because the project is stale, it didn't see any updates for two years, and does not support the latest version of the OpenAPI specification\footnote{See https://www.npmjs.com/package/swagger-tools}.
+The appendix \ref{sec:appendix:openapi} shows an excerpt of the \inlinecode{openapi.yml} file. This file is the authoritative documentation for the API. Swagger\footnote{https://swagger.io}, the open-source project behind the OpenAPI standard, provides tools to generate an interactive documentation page from this file automatically, see figure \ref{fig:api-docs}. Docify uses a library called "swagger-tools" to automatically generate some scaffolding for their code directly from their OpenAPI file. This approach saves some repetitive coding and helps to tie the functional code and the documentation together. For CEMicro, however, I decided to omit this library and add everything by hand because the project is stale, it didn't see any updates for two years, and does not support the latest version of the OpenAPI specification\footnote{See https://www.npmjs.com/package/swagger-tools}.
 
 
 \section{Backend Framework with Express.js}
 
 \begin{itemize}
-  \item \todo{Tool: Nodemon}
-  \item \todo{Tool: Express}
-  \item \todo{Tool: Express Validator}
-  \item \todo{MVC -> MVCS (Model View Controller Service)}
+  \item \done{Tool: Express}
+  \item \done{Tool: Express Validator}
+  \item \done{MVC -> MVCS (Model View Controller Service)}
 \end{itemize}
 
+I tried to mostly include libraries that the Docify team already used to make the transition more manageable, and so that the two microservices can merge with little friction if desired. Fortunately, Docify tended to use the bread and butter libraries for JavaScript servers: Express ~\cite{stateofjs.2019}. Express\footnote{https://expressjs.com} is a minimalist Node.js framework that takes care of HTTP requests and routing with no additional frills. Besides, Express leaves a free choice of the file structure.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.3\linewidth]{assets/mvc-process.png}
+  \caption{Diagram of interactions within the MVC pattern}
+  \source{https://en.wikipedia.org/wiki/Model–view–controller}
+  \label{fig:mvc-process}
+\end{figure}
+
+In backend development, it has become common to use the Model-View-Controller (MVC) architecture. User interactions go to the controller, a function that decides which data models to load and what view to show to the user. A view is a general word for a page of an application. In pure API backends, that is, backends that don't render a view but only provide an API, the view layer is usually omitted. The controller directly returns the data to the caller of the API.
+
+Additionally, a service layer is often used between the controller and the model. The controller calls the service to get the data it needs. The service is responsible for the core business logic, loading the data from the database by calling the model, and then performing the necessary data manipulations. Appendix \ref{sec:appendix:mvcs} shows a code example for the controller, service, and model of the element component. Sequelize\footnote{https://sequelize.org/v5/}, an ORM\footnote{Object-relational mapping, see https://en.wikipedia.org/wiki/Object-relational_mapping} library for Node.js, handles the data model and database access; see the next section.
+
+There are three additional preliminary concerns for every server-side application. The first is data validation for which I used the express-validator\footnote{https://express-validator.github.io/docs/} library. It takes care that the parameters provided by the user can be processed and don't contain any malicious code. The second concern is user access management, which we decided to omit because of the brevity of the provided time. We also decided to omit the third concern, which is testing. Omitting tests is considered a developer sin, but because CEMicro is more a proof of concept, we felt comfortable in saving the development time.
 
 \section{Data persistance with PosgreSQL}
 
 \begin{itemize}
-  \item \todo{Sequelize https://github.com/sequelize/express-example}
-  \item \todo{Discarded: Flyway-db, Umzug}
-  \item \todo{Migrations: Sequelize}
+  \item \done{Sequelize https://github.com/sequelize/express-example}
+  \item \done{Discarded: Flyway-db, Umzug}
+  \item \done{Migrations: Sequelize}
 \end{itemize}
+
+All the decisions for which data goes where were made at this point, which makes the database implementation trivial. As mentioned in Section \ref{sec:arch:technology} I decided on PostgreSQL. Setting up the database itself at this point means starting a Docker container with the official PostgreSQL Docker image\footnote{https://hub.docker.com/_/postgres/}. The challenge with databases lies in keeping the schemata up to date with the data model of the backend. For programming code, git version control keeps track of all changes and can handles conflicts when two developers edit the same lines of a file simultaneously. With git, every programmer can always pull the current version of the code from a central repository. Such a system doesn't exist for databases. Instead, developers write migrations, a set of instructions to bring the database schema from an older to a newer state. These migrations are committed to version control so that developers can update their local database as needed. I looked at several migration solutions for Node.js.
+
+The Docify team recommended Flyway\footnote{https://flywaydb.org} to me, but it is primarily for Java applications, and I couldn't find a suitable package for Node.js. Another recommendation I found was Umzug\footnote{https://www.npmjs.com/package/umzug}, a well-supported package, but it doesn't handle the actual database manipulation. The documentation for Umzug recommended the Sequelize ORM\footnote{https://sequelize.org/v5/} to interface with the database. After looking at Sequilize, I realized that it provides a database-agnostic ORM, which means that I can write database access in its custom format, and Sequilizes translates it into valid SQL statements for PostgreSQL. Not only that, Sequelize makes it trivial to change the database dialect, for example, from PostgreSQL to MySQL, with a simple configuration option, and it takes care of the rest. And Sequelize comes with its system for database migrations, which I decided to use.
 
 
 \section{Frontend Framework with Vue.js}
 
-\begin{itemize}
-  \item \todo{To do ...}
-\end{itemize}
+Originally the plan was to write the frontend in Angular\footnote{https://angular.io}. Angular is a client-side framework created by Google and popular among more traditional software companies for its Java-like approach in the directory structure and use of the static type JavaScript language extension Typescript. I agreed with this decision, primarily because the Docify team also used it. I am mentioning the Docify team repeatedly here for the mere reason that it is the only other service inside the POS team written with modern web-development principles. It is the only other microservice inside POS in existence. However, Angular turned out to have a rather steep learning curve and is overly complicated for such a small application as CEMicro. After completing several tutorials, I understood why 35\% of frontend engineers say they used Angular and would never use it again\footnote{See figure \ref{fig:frontend-framework-usage}}. Having said that, I realized I already mentioned this in the previous chapter, but it bears repeating.
+
+Going with vue turned out to be a breeze. I already had ample experience with the framework and knew which plugins to include for the required use cases. Because CEMicro is a proof of concept, my mentor and I felt justified with the decision. I set up the frontend in such a way as to include the most commonly used techniques so that a rewrite into Angular by another team, later on, would be frictionless. For example, I exclusively used Bootstrap\footnote{https://getbootstrap.com} components for the user interface. Bootstrap is the go-to CSS framework for standard user interfaces like the admin page of CEMicro. Having a working user interface build on these principles as an example, the next team can rewrite it quickly if necessary.
+
+I also made sure the frontend looks almost identical to Docify so it can be merged if desired and so that users already familiar with the Docify interface can use CEMicro intuitively.
+
+\begin{figure}[ht]
+  \begin{subfigure}[b]{0.5\linewidth}
+    \includegraphics[width=\linewidth]{assets/cemicro-element-editor.png}
+    \caption{CEMicro element editor}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\linewidth}
+    \includegraphics[width=\linewidth]{assets/docify-editor.png}
+    \caption{Docify template editor}
+  \end{subfigure}
+  \caption{CEMicro's user interface is similar to that of Docify}
+  \label{fig:cemicro-docify-ui}
+\end{figure}
 
 
 \section{Virtualisation with Docker}
 
 \begin{itemize}
- \item \todo{install packages, build, prune packages}
- \item \todo{...}
+  \item \todo{install packages, build, prune packages}
 \end{itemize}
 
 
@@ -145,18 +177,18 @@ The appendix, page \ref{sec:appendix}, shows an excerpt of the \inlinecode{opena
 \end{itemize}
 
 
-\section{Challanges during development}
+% \section{Challanges during development}
 
-\begin{itemize}
-  \item \todo{Knowing how to set up the development environment}
-  \item \todo{Understanding the task, see [CE Properties]
-  \item \todo{Setting up git/bash on windows}
-  \item \todo{File permissions for docker on windows
-\end{itemize}
+% \begin{itemize}
+%   \item \todo{Knowing how to set up the development environment}
+%   \item \todo{Understanding the task, see [CE Properties]
+%   \item \todo{Setting up git/bash on windows}
+%   \item \todo{File permissions for docker on windows
+% \end{itemize}
 
-https://medium.com/@akash1233/change-file-permissions-when-working-with-git-repos-on-windows-ea22e34d5cee
+% https://medium.com/@akash1233/change-file-permissions-when-working-with-git-repos-on-windows-ea22e34d5cee
 
-https://www.notion.so/CE-Properties-7bf08f28c69344c1957e7072c1101fd6
+% https://www.notion.so/CE-Properties-7bf08f28c69344c1957e7072c1101fd6
 
 
 \section{Documentation of CEMicro}
