@@ -1,12 +1,12 @@
 \chapter{CEMicro Architecture and Technology Stack}
 \label{sec:arch}
 
-This chapter takes us through the journey of planning and designing the CEMicro service. We understand the boundaries and features of the so-called "Configurable Elements" of the POS application and learn the goals Capgemini has with this project. Several times initial assumptions about the final service are challenged, and new and better design decisions made. We also decide, or sometimes somewhat justify, the technology decisions for the later implementation of CEMicro.
+This chapter takes us through the journey of planning and designing the CEMicro service. We understand the boundaries and features of the so-called ``Configurable Elements'' of the POS application and learn the goals Capgemini has with this project. Several times initial assumptions about the final service are challenged, and new and better design decisions made. We also decide, or sometimes somewhat justify, the technology decisions for the later implementation of CEMicro.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.4\linewidth]{assets/illustration-microservice-printer.png}
-  \caption{CEMicro is responsible for the "Configurable Elements" of printed documents}
+  \caption{CEMicro is responsible for the ``Configurable Elements'' of printed documents}
 \end{figure}
 
 \section{The existing appliction}
@@ -53,11 +53,11 @@ Figure \ref{fig:docify} shows the administration interface for Docify, and it is
   \label{fig:docify}
 \end{figure}
 
-While the technical aspect of Docify might be simple, it is interesting to observe the non-technical challenges that a microservice is facing. Besides the question of how a microservice should be extracted and build, there is the economic question of why it is necessary to invest the time into creating such a service when it seems to be working just fine as it is. The question every project has to face is, "Does it add business value?" and if it doesn't, why should the business spend money on the project? This is an interesting question especially for engineers who often try to build the ideal solution for a problem, after all, that's why we became engineers in the first place, but forget that our time is valuable and to build the ideal solution, in this case, a microservice, for an already working feature may not make much sense to the business as a whole.
+While the technical aspect of Docify might be simple, it is interesting to observe the non-technical challenges that a microservice is facing. Besides the question of how a microservice should be extracted and build, there is the economic question of why it is necessary to invest the time into creating such a service when it seems to be working just fine as it is. The question every project has to face is, ``Does it add business value?'' and if it doesn't, why should the business spend money on the project? This is an interesting question especially for engineers who often try to build the ideal solution for a problem, after all, that's why we became engineers in the first place, but forget that our time is valuable and to build the ideal solution, in this case, a microservice, for an already working feature may not make much sense to the business as a whole.
 
 So why was Docify build in the first place? I haven't been involved myself, but from the proceedings with my project, I can surmise some good indicators. On the one hand, the POS application is over five years old, which in the world of software is a man with a cane and a white beard. Over the lifetime of any software, it tends to become ever more complex and both in its technical scope but also in terms of management. Thus even small changes to the codebase can take several days or even weeks until the task gets prioritized, implemented, and deployed. In the ideal situation, the database contains all the parts which users are supposed to be able to edit so that changes don't have to be handed to developers, but in the case of POS, many adjustments to the document creation could only be made by direct manipulation of the codebase which meant that a task hat to be created for developers.
 
-One example of this directly involves my task, the so-called "Configurable Elements," which I will describe in more detail in the next section, are basically texts that can be edited by users. But the definition for these elements is hardcoded in the application, meaning if users want to add a new such item, they have to create a task for devs to do so, which adds considerable friction to something which should be just one click. Essentially, Docify enables users to do administrative tasks directly while saving all the development time of adding these admin interface features to the existing monolith codebase.
+One example of this directly involves my task, the so-called ``Configurable Elements,'' which I will describe in more detail in the next section, are basically texts that can be edited by users. But the definition for these elements is hardcoded in the application, meaning if users want to add a new such item, they have to create a task for devs to do so, which adds considerable friction to something which should be just one click. Essentially, Docify enables users to do administrative tasks directly while saving all the development time of adding these admin interface features to the existing monolith codebase.
 
 The other business value has to do with the fact that there is currently a particular hype around microservice architectures. The project of Docify enabled Capgemini to showcase this architectural model on a reasonably simple use-case to its client while not losing much in terms of wasted development time if the client declines its further development. And since a microservice can be built in a completely separate tech stack, it was mostly a proof of concept/demo of a flashy new architecture and some flashy new technology.
 
@@ -74,11 +74,11 @@ In the end, the client liked what business value Docify had to offer and was wil
 \end{itemize}
 
 
-As already noted in the previous segment, the idea of a microservice for document creation is pretty straightforward since the API is well defined from the get-go. The printable document handling in POS, however, has three parts. Besides template and dynamic values, which are different on a per offer basis, it defines a number of static values inside the templates, which are called "configurable elements." The idea behind configurable values, or CEs in short, is, that they are the same on every printout, but can be defined according to a number of factors like the current language if the paper is branded or blank if a new or used car is sold and so on.
+As already noted in the previous segment, the idea of a microservice for document creation is pretty straightforward since the API is well defined from the get-go. The printable document handling in POS, however, has three parts. Besides template and dynamic values, which are different on a per offer basis, it defines a number of static values inside the templates, which are called ``configurable elements.'' The idea behind configurable values, or CEs in short, is, that they are the same on every printout, but can be defined according to a number of factors like the current language if the paper is branded or blank if a new or used car is sold and so on.
 
 The next segment will go into more detail what complexity was actually hidden behind the rather primitive looking CEs but suffice to say at this point, the setting of these static values for a printable template is cumbersome and complicated by nature.
 
-My task, therefore, was to extract the configuration of these CE values into a separate service, which can be queried by the POS system to retrieve the correct set of CE values for any given document template under a given set of conditions. For example, if the salesman using POS wants to print an offer for a new car in the Netherlands on blank paper, the POS application would then send a request to this new service saying: "please give me all the configurable elements I need to print a new offer for this and that car in the Netherlands marked on blank paper." The responsibility of the service would then be to produce a list of key-value pairs that the POS application can then hand to the Docify service, or its internal printing function for that matter, to be inserted into the configurable element placeholders in the document template.
+My task, therefore, was to extract the configuration of these CE values into a separate service, which can be queried by the POS system to retrieve the correct set of CE values for any given document template under a given set of conditions. For example, if the salesman using POS wants to print an offer for a new car in the Netherlands on blank paper, the POS application would then send a request to this new service saying: ``please give me all the configurable elements I need to print a new offer for this and that car in the Netherlands marked on blank paper.'' The responsibility of the service would then be to produce a list of key-value pairs that the POS application can then hand to the Docify service, or its internal printing function for that matter, to be inserted into the configurable element placeholders in the document template.
 
 Not much guidance was given to me beyond this point from Capgemini. I was given access to the source code of both the POS application and the Docify service and could start them on personal virtual machines to understand their working. Because several teams of developers were working on POS and after seeing the size of the codebase, I quickly concluded that it would not make much sense for me to try to understand the inner workings of the existing Java code. Instead, I decided to investigate the user interface of both services, and in the case of Docify, the API to understand what features my service needs to offer and what interfaces it should expose.
 
@@ -143,7 +143,7 @@ It is, therefore, imperative when extracting a microservice to understand precis
   \label{fig:pos:c}
 \end{figure}
 
-This means CEs are not, as initially assumes, a simple key-value data structure but, in fact, can contain many values, each coming with a number of properties. These properties are later used to determine which value is the best fit for the current use case. Through testing, the possible values for each property were identified and mapped out in table \ref{table:ce-properties}. Figure \ref{fig:ce-properties} shows how these properties are presented to the user. Note how it is not immediately apparent that the valid from-to dates are part of the configuration and that they can, in fact, be changed. Also note the confusing layout of the value and description text inputs, the description which has no real purpose being the first input while the actual value of the configurable element, the most important thing of the whole interface, is the last input field of them all. Additionally, website users are more used to "value" fields being a single line and "description" fields being multi-line, here this logic is inverted.
+This means CEs are not, as initially assumes, a simple key-value data structure but, in fact, can contain many values, each coming with a number of properties. These properties are later used to determine which value is the best fit for the current use case. Through testing, the possible values for each property were identified and mapped out in table \ref{table:ce-properties}. Figure \ref{fig:ce-properties} shows how these properties are presented to the user. Note how it is not immediately apparent that the valid from-to dates are part of the configuration and that they can, in fact, be changed. Also note the confusing layout of the value and description text inputs, the description which has no real purpose being the first input while the actual value of the configurable element, the most important thing of the whole interface, is the last input field of them all. Additionally, website users are more used to ``value'' fields being a single line and ``description'' fields being multi-line, here this logic is inverted.
 
 \begin{table}[!ht]
   \begin{center}
@@ -237,6 +237,11 @@ From the get-go, I developed CEMicro in a way that it can later run inside Docke
   \label{fig:mockup}
 \end{figure}
 
+
 \section{Wrap-up}
+
+\begin{itemize}
+  \item \todo{Please write me}
+\end{itemize}
 
 
