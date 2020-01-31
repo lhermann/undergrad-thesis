@@ -1,6 +1,8 @@
 \chapter{CEMicro Implementation}
 \label{sec:impl}
 
+In this chapter, we dive into the practical implementation of CEMicro. The microservice consists of three layers, the frontend, the backend, and the database. Each layer is treated in some detail. Though the information is very technical, I made an effort to keep it simple enough for less technical affine readers to understand. In no way does this chapter cover the implementation comprehensively but provides an overview of the most critical decisions.
+
 
 \section{Setting up the Development Environment}
 
@@ -197,7 +199,7 @@ USER node
 CMD ./node_modules/.bin/sequelize db:migrate && npm run production
 \end{lstlisting}
 
-We can see that it uses the \inlinecode{node:12-alpine} image as a foundation, copies the files from the backend into the new image, and installs all NPM dependencies. It then defines some environment variables and instructs the container to run a set of commands when on start. An "image" in Docker language is like a blueprint, and a "container" takes that blueprint and creates a live instance from it. Multiple containers can be created from one image.
+We can see that it uses the \inlinecode{node:12-alpine} image as a foundation, copies the files from the backend into the new image, and installs all NPM dependencies. It then defines some environment variables and instructs the container to run a set of commands when on start. An "`image"' in Docker language is like a blueprint, and a "container" takes that blueprint and creates a live instance from it. Multiple containers can be created from one image.
 
 The backend is particularly simple because it doesn't require any build step; the code is just copied and executed directly. The frontend, however, posed an interesting challenge because a build step is required. The frontend is made up of special \inlinecode{.vue} component files which cannot be executed directly. First, we have to transform them into valid HTML, CSS, and JavaScript files during a build process. But to keep the image as small as possible, all the code that was only required for the build needs to be removed before finishing the Docker image. It turns out that NPm provides a command to "prune" development code from the filesystem after the build, here is the relevant excerpt of the frontend Dockerfile:
 
@@ -213,28 +215,29 @@ And with that, the containerization of the CEMicro application is complete. Not 
 \section{Interfacing with the monolith development team}
 
 \begin{itemize}
-  \item \todo{Changes to Docify}
+  \item \done{Changes to Docify}
 \end{itemize}
 
+Interfacing with the rest of the team was probably my most significant challenge in this task. Robin, my mentor, went to great length to make sure I had everything I needed and was taken care of. But even his endeavors can only go so far. In the end, I was part of my CEMicro team of one, only talking now and then with others from POS when necessary. This situation, of course, is particular to my position as a bachelor student with a project that only lasts four months, and yet, some lessons can be learned from it.
 
-% \section{Challanges during development}
+When extracting a microservice, as with any other software development, make sure there is a regular exchange of all the key parties involved. Don't only bring in the main stakeholder at the end of the project, as was the case with my project. Chances are once the boundaries are specified and understood, the team would want to simplify concepts that grew in complexity over the years. Take this chance, simplifying software is always a worthwhile endeavor.
 
-% \begin{itemize}
-%   \item \todo{Knowing how to set up the development environment}
-%   \item \todo{Understanding the task, see [CE Properties]
-%   \item \todo{Setting up git/bash on windows}
-%   \item \todo{File permissions for docker on windows
-% \end{itemize}
+Next, don't treat your microservice as not relevant. If your company wants to move forward, embrace change like this and take it seriously. I assume the problem was that Capgemini doesn't own the POS project itself but is doing client work for Mercedes Benz. It means the primary stakeholder is another layer removed from the actual developer. Instead of Mercedes wanting to invest in a service-oriented architecture, I had the impression that Capgemini tried to entice its client to do so. This situation was certainly not the most fertile ground for such technological innovation, especially since it doesn't translate into hard coin right away.
 
-% https://medium.com/@akash1233/change-file-permissions-when-working-with-git-repos-on-windows-ea22e34d5cee
-
-% https://www.notion.so/CE-Properties-7bf08f28c69344c1957e7072c1101fd6
+In the end, I did work with the team responsible for Docify. I tried to understand their application and their pain points. For example, Docify has two different user interfaces, one for administration and the other for daily use. Both users interfaced use their dedicated backend service. However, these two services use the same database. I asked about this arrangement, and they made it clear that this arrangement was the wrong choice and that these sub-services were cut too small. I also contributed to their codebase by adding a small API endpoint, which I needed for CEMicro. Beyond this, however, I worked alone.
 
 
 \section{Documentation of CEMicro}
 
 \begin{itemize}
-  \item \todo{Providing a foundation for others to build on (Confluence, Readme, Thesis)}
+  \item \done{Providing a foundation for others to build on (Confluence, Readme, Thesis)}
 \end{itemize}
+
+Documentation is a point not particular to microservices but probably of more importance here. Any application needs proper documentation, so new developers can hit the ground running. When using a microservice architecture, it is even more likely that programmers need to make changes that have never worked on the service before. This thesis is one way of documenting CEMicro and should work as a reference for others. More important, however, is to leave proper breadcrumbs where others would expect them.
+
+Confluence is a kind of wiki page developed by Atlassian, the company behind Jira, which Capgemini uses for its project management. It is the place where the entry point for everything POS can be found, so it is the place where I added at least an introduction to CEMicro.
+
+The other place is the \inlinecode{README.md} file in the root directory of the application code. The \inlinecode{README.md} became a de-facto convention among developers to look for basic usage instruction of a program. CEMicro's README offers simple first steps to start the application with Docker and to set it up for development.
+
 
 \section{Warp-up}
