@@ -221,14 +221,15 @@ I want to mention one more technology outside the three-layer structure, which i
 From the get-go, I developed CEMicro in a way that it can later run inside Docker containers. That means if you want to run CEMicro in the future, instead of needing to understand each technology and how to run it on your machine, all you needed is one docker command, and the app is ready for use.
 
 
-% \section{Designing the API}
-
-
 \section{Designing the User Interface}
 
 \begin{itemize}
-  \item \todo{How can the complexity of CEs be exposed in a more straightforward way?}
+  \item \done{How can the complexity of CEs be exposed more straightforwardly?}
 \end{itemize}
+
+The user interface doesn't just serve an aesthetic purpose; it helps the user to understand and manage the complexity of a system. Figure \ref{fig:pos} on page \pageref{fig:pos} and figure \ref{fig:ce-properties} on page \pageref{fig:ce-properties} show glimpses of the existing user interface in POS. The existing interface is functional but clunky and hard to use. For example, it is not immediately apparent that the validity date of a CE can be changed and how to do it. It is also difficult to understand which of the CE items is active under which circumstances.
+
+Figure \ref{fig:mockup} shows a high fidelity mockup I created before even starting to implement the microservice. I showed it to my mentor and the Docify team to get their feedback on the design. I tried to make the relationship between CEs and templates as simple as possible. Each CE can contain individual items, so I tried to show their hierarchy clearly. I also wanted to make all the different properties as evident as possible, showing them in a condensed view, highlighting the ones that differ from default values and only showing input options when the item is in edit mode.
 
 \begin{figure}
   \centering
@@ -237,11 +238,19 @@ From the get-go, I developed CEMicro in a way that it can later run inside Docke
   \label{fig:mockup}
 \end{figure}
 
+In the final implementation, I decided to go with three views, always clearly showing the current position with breadcrumbs on top:
+
+\begin{itemize}
+  \item A list of templates (see figure \label{fig:cemicro-template-list})
+  \item A list of elements per template (see figure \label{fig:cemicro-element-list})
+  \item A list of items per element (see figure \label{fig:cemicro-item-list})
+\end{itemize}
+
+The controls of a single element item became a little more uniform in the end. I also added a ``Refresh'' button above the document preview to see the current changes applied. I am planning another set of controls next to the refresh button to choose the properties (new vehicle vs. used vehicle, etc.), which should be applied to the preview to see which item is used under which circumstances. This last feature, however, is not yet implemented at the time of this writing.
+
 
 \section{Wrap-up}
 
-\begin{itemize}
-  \item \todo{Please write me}
-\end{itemize}
+This part of the project, investigating the existing application, and making architectural decisions, provided the most learnings for me. The theory behind microservices was comparatively easy to understand because I worked a lot with cloud infrastructures before. The implementation was simple because I have ample experience in programming at this point. It was interesting how much complexity accrued over time in such a simple feature as the configurable elements. Deciding where the data should live helped me better understand how distributed data works. And redesigning an existing user interface is something I like doing.
 
 
