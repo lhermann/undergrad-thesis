@@ -1,13 +1,9 @@
 \chapter{Conclusion}
 \label{sec:cunclusion}
 
-Ergebnis-Bewertung, Zusammenfassung und Ausblick
+In the introduction, I formulated several questions and goals for this project. In the end, I can say that all these questions received answeres, and I accomplished my goals. I understood what a microservice is and how to cut it from an existing monolith. Even though the answer to the second question was not black and white, I gained practical experience with it in this project. I learned the advantages and disadvantages of a microservice architecture as well as the challenges involved. I saw the consequences of cutting a microservice too small on the example of Docify. I had a chance to decide upon the user experience of a feature set, which is no a microservice.
 
-\begin{itemize}
-  \item \todo{Don't start with a microservice if you need to move fast}
-  \item \todo{Not suitable for small project}
-  \item \todo{Microservices are a long term investment}
-  \item \todo{Work incrementally}
-  \item \todo{How to retire old code? Open question}
-\end{itemize}
+I want to highlight one of these questions here: When does it make sense to extract a microservice? The answer turned out more nuanced than initially expected. It makes sense if the application needs to scale, both for the number of users and geographic diversity. This way, an application can use the strengths of the internet, also making it more resilient. The other reason is release frequency since testing and deployment are inherently faster with microservices. The drawbacks are a more sophisticated infrastructure and the added complexity of distributed data. In most cases, new projects should not start with a microservice architecture except if both their funding is secured and their userbase is known and fits the above criteria. Microservices are a long term investment
+
+However, there are also questions that I omitted in this paper. For example, what happens with the existing code in POS once the microservice is in use? Does the team make an effort to remove the code, or is it easier to leave it as legacy code? How long does it take until the microservice replaces the existing functionality? But before CEMicro is used in production, project managers have to advertise the idea, executive boards have to make money decisions, and developers have to program new API endpoints. And in large corporations, and this is my last learning for this paper, this can take years.
 

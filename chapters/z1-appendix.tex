@@ -127,23 +127,10 @@ This is an excerpt of the \inlinecode{openapi.yml} file, the authoritative and l
 
 \begin{lstlisting}
 openapi: 3.0.1
-info:
-  title: CEMicro
-  version: '1.0'
-  license:
-    name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  contact:
-    name: Capgemini
-    url: 'https://www.capgemini.com/...'
-  description: OpenAPI v2 (Swagger) file representing the CEMicro API
-servers:
-  - url: 'https://localhost:3001/api/v1'
-    description: Current Environment
-  - url: 'https://cemicro.example.com/api/v1'
-    description: Staging Environment
+
+...
+
 paths:
-  [...]
   '/configurable-elements/{id}':
     parameters:
       - schema:
@@ -218,12 +205,11 @@ paths:
                 defaultValue:
                   type: string
                   example: Hello World
-      tags:
-        - Configurable Elements
-  [...]
+
+...
+
 components:
   schemas:
-    [...]
     Element:
       title: Element
       type: object
@@ -256,39 +242,6 @@ components:
         - market
         - name
         - defaultValue
-    [...]
-  securitySchemes:
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
-  parameters:
-    market:
-      name: market
-      in: path
-      description: MB code of the market
-      required: true
-      schema:
-        type: string
-        pattern: '^[a-z]{1,4}$'
-      example: nl
-    template_name:
-      name: name
-      in: path
-      description: The name of the template
-      required: true
-      schema:
-        type: string
-        pattern: '^[a-z.-_]+$'
-      example: new_offer_pkw
-externalDocs:
-  description: Find out more about Swagger
-  url: 'http://swagger.io'
-tags:
-  - name: Templates
-    description: Docify templates
-  - name: Configurable Elements
-    description: Elements unique per Docify template
-  - name: Configurable Element Items
-    description: ElementItems defining the `activeValue` of Elements depending on the query
+
+...
 \end{lstlisting}

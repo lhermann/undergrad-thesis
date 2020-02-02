@@ -241,13 +241,32 @@ Figure \ref{fig:mockup} shows a high fidelity mockup I created before even start
 In the final implementation, I decided to go with three views, always clearly showing the current position with breadcrumbs on top:
 
 \begin{itemize}
-  \item A list of templates (see figure \label{fig:cemicro-template-list})
-  \item A list of elements per template (see figure \label{fig:cemicro-element-list})
-  \item A list of items per element (see figure \label{fig:cemicro-item-list})
+  \item A list of templates (see figure \ref{fig:cemicro-template-list})
+  \item A list of elements per template (see figure \ref{fig:cemicro-element-list})
+  \item A list of items per element (see figure \ref{fig:cemicro-item-list})
 \end{itemize}
 
 The controls of a single element item became a little more uniform in the end. I also added a ``Refresh'' button above the document preview to see the current changes applied. I am planning another set of controls next to the refresh button to choose the properties (new vehicle vs. used vehicle, etc.), which should be applied to the preview to see which item is used under which circumstances. This last feature, however, is not yet implemented at the time of this writing.
 
+\begin{figure}[ht]
+  \begin{subfigure}[b]{0.5\linewidth}
+    \includegraphics[width=\linewidth]{assets/cemicro-template-list.png}
+    \caption{Template list view}
+    \label{fig:cemicro-template-list}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\linewidth}
+    \includegraphics[width=\linewidth]{assets/cemicro-element-list.png}
+    \caption{Configurable element view}
+    \label{fig:cemicro-element-list}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\linewidth}
+    \includegraphics[width=\linewidth]{assets/cemicro-item-list.png}
+    \caption{Element item view}
+    \label{fig:cemicro-item-list}
+  \end{subfigure}
+  \caption{CEMicro user interface}
+  \label{fig:cemicro-ui}
+\end{figure}
 
 \section{Wrap-up}
 
