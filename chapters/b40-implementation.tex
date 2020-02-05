@@ -48,7 +48,7 @@ One challenge I faced with setting up bash on windows was the limited way in whi
   \item \done{Discarded: swagger-tools}
 \end{itemize}
 
-The CEMicro service deals with three different objects\footnote{In programming, an object is like a container for data} — the template, the configurable element, and its items. The template contains the template string in combination with sample data for the placeholders inside the template. The configurable element, as discussed in the section on page \pageref{sec:arch:understanding}, a holder for the individual properties as well as the name and the default value. And the configurable element item which is one individual set of the properties of table \ref{table:ce-properties}.
+The CEMicro service deals with three different objects\footnote{In programming, an object is like a container for data.} — the template, the configurable element, and its items. The template contains the template string in combination with sample data for the placeholders inside the template. The configurable element, as discussed in the section on page \pageref{sec:arch:understanding}, a holder for the individual properties as well as the name and the default value. And the configurable element item which is one individual set of the properties of table \ref{table:ce-properties}.
 
 \begin{table}[!ht]
   \begin{center}
@@ -209,7 +209,7 @@ RUN npm run build
 RUN npm prune --production
 \end{lstlisting}
 
-And with that, the containerization of the CEMicro application is complete. Not the single command \inlinecode{docker-compose up} takes care of building and starting all three parts of the application, including running the migrations for a new database, and it is then usable through the browser.
+And with that, the containerization of the CEMicro application is complete. Now the single command \inlinecode{docker-compose up} takes care of building and starting all three parts of the application, including running the migrations for a new database, and it is then usable through the browser.
 
 
 \section{Interfacing with the monolith development team}
@@ -240,7 +240,7 @@ Confluence is a kind of wiki page developed by Atlassian, the company behind Jir
 The other place is the \inlinecode{README.md} file in the root directory of the application code. The \inlinecode{README.md} became a de-facto convention among developers to look for basic usage instruction of a program. CEMicro's README offers simple first steps to start the application with Docker and to set it up for development.
 
 
-\section{Warp-up}
+\section{Wrap-up}
 
 In the end, most implementation decisions are practical and situational. I used technology I am familiar with, checked libraries the Docify project used and made sure that they have proper documentation and active development. The end goal is to make it easy for oneself and others to understand the code and pick up development where I left off. Using well-supported libraries and writing robust documentation are the two ways to help software live longer. Finally, communication is crucial but also one of the harder aspects of software development.
 
