@@ -6,15 +6,6 @@ In this chapter, we dive into the practical implementation of CEMicro. The micro
 
 \section{Setting up the Development Environment}
 
-\begin{itemize}
-  \item \done{Visual Studio Code (code editor) https://code.visualstudio.com/}
-  \item \done{Git (version control) https://git-scm.com/}
-  \item \done{Virtualisation with Docker}
-  \item \done{Node.js}
-  \item \done{Challenge: Setting up git/bash on windows}
-  \item \done{Challenge: File permissions for docker on windows}
-\end{itemize}
-
 It seems trivial to treat the development environment in this chapter, but that would be a disservice to any programmer. The development environment is an essential part of writing an application and can be as much of a time sink as software bugs, as we will see. I am used to developing on a Mac operating system. Mac is based on Unix and offers a built-in Bash shell, basically just like any Linux machine, while Windows uses an entirely different foundation for its operating system. All the technologies which work with cloud computing and distributed services operate on Linux systems because the internet runs on Linux\footnote{Yeah, sorry Microsoft}. We are talking about technologies like Git version control, Docker container virtualization, and Node.js and its packet manager NPM. The machine Capgemini provided me with is a Windows computer.
 
 I first set up Visual Studio Code, currently the most popular code editor, especially among web developers and developed by Microsoft ~\cite{stackoverflow.2019}. Next, I set up git\footnote{https://git-scm.com/downloads}, which comes with a complete Bash environment, howbeit with a reduced feature set. Bash stands for ``Bourne Again Shell'' and is a variation of the default Unix shell, a command-line interface. An average user usually never uses the command line but interacts with generated user interfaces (GUI) of a program. In a shell, the user can interact with programs by typing one-line commands. For example, \inlinecode{rm -rf test-dir/} instructs the simple ``remove'' program to delete the ``test-dir'' folder with all its content. This way of using programs is handy for programmers and system administrators in their work, especially if running commands on remote computers through SSH\footnote{Secure Shell, a way to use the shell of a remote computer} sessions.
@@ -39,14 +30,6 @@ One challenge I faced with setting up bash on windows was the limited way in whi
 
 \section{Application Programming Interface}
 \label{sec:impl:api}
-
-\begin{itemize}
-  \item \done{REST}
-  \item \done{Swagger/OpenApi}
-  \item \done{Single source of truth}
-  \item \done{Discarded: Saving Templates in CEMicro (see single source of truth page)}
-  \item \done{Discarded: swagger-tools}
-\end{itemize}
 
 The CEMicro service deals with three different objects\footnote{In programming, an object is like a container for data.} — the template, the configurable element, and its items. The template contains the template string in combination with sample data for the placeholders inside the template. The configurable element, as discussed in the section on page \pageref{sec:arch:understanding}, a holder for the individual properties as well as the name and the default value. And the configurable element item which is one individual set of the properties of table \ref{table:ce-properties}.
 
@@ -108,12 +91,6 @@ The appendix \ref{sec:appendix:openapi} shows an excerpt of the \inlinecode{open
 
 \section{Backend Framework with Express.js}
 
-\begin{itemize}
-  \item \done{Tool: Express}
-  \item \done{Tool: Express Validator}
-  \item \done{MVC -> MVCS (Model View Controller Service)}
-\end{itemize}
-
 I tried to mostly include libraries that the Docify team already used to make the transition more manageable, and so that the two microservices can merge with little friction if desired. Fortunately, Docify tended to use the bread and butter libraries for JavaScript servers: Express ~\cite{stateofjs.2019}. Express\footnote{https://expressjs.com} is a minimalist Node.js framework that takes care of HTTP requests and routing with no additional frills. Besides, Express leaves a free choice of the file structure.
 
 \begin{figure}[ht]
@@ -130,12 +107,6 @@ Additionally, a service layer is often used between the controller and the model
 There are three additional preliminary concerns for every server-side application. The first is data validation for which I used the express-validator\footnote{https://express-validator.github.io/docs/} library. It takes care that the parameters provided by the user can be processed and don't contain any malicious code. The second concern is user access management, which we decided to omit because of the brevity of the provided time. We also decided to omit the third concern, which is testing. Omitting tests is considered a developer sin, but because CEMicro is more a proof of concept, we felt comfortable in saving the development time.
 
 \section{Data persistance with PosgreSQL}
-
-\begin{itemize}
-  \item \done{Sequelize https://github.com/sequelize/express-example}
-  \item \done{Discarded: Flyway-db, Umzug}
-  \item \done{Migrations: Sequelize}
-\end{itemize}
 
 All the decisions for which data goes where were made at this point, which makes the database implementation trivial. As mentioned in Section \ref{sec:arch:technology} I decided on PostgreSQL. Setting up the database itself at this point means starting a Docker container with the official PostgreSQL Docker image\footnote{https://hub.docker.com/_/postgres/}. The challenge with databases lies in keeping the schemata up to date with the data model of the backend. For programming code, git version control keeps track of all changes and can handles conflicts when two developers edit the same lines of a file simultaneously. With git, every programmer can always pull the current version of the code from a central repository. Such a system doesn't exist for databases. Instead, developers write migrations, a set of instructions to bring the database schema from an older to a newer state. These migrations are committed to version control so that developers can update their local database as needed. I looked at several migration solutions for Node.js.
 
@@ -165,10 +136,6 @@ I also made sure the frontend looks almost identical to Docify so it can be merg
 
 
 \section{Virtualisation with Docker}
-
-\begin{itemize}
-  \item \done{install packages, build, prune packages}
-\end{itemize}
 
 If an application is packaged with Docker, then starting the application on a new machine is a breeze. PostgreSQL uses an official predefined Docker image, which works with minimal configuration, in this case, only a few environment variables. Both the backend and frontend use the official Node.js image. Only the image is not enough in this case because the programming code has to go into the container as well. One way to do that is with so-called volumes. A volume is a directory existing on the local machine and in the docker container at the same time. This arrangement is beneficial when using Docker during development but not for running it in production. I didn't use Docker during development because it tends to be a little slow. After all, the Docker volume has to sync the filesystem between the host and its virtual machine. Instead, I am running the application right on my system with my Node.js runtime, which is significantly faster. But for the production build, I want to have everything inside the container. To achieve this, we add a Dockerfile to the application, using the Node.js image as a foundation and building upon it with our code.
 
@@ -213,10 +180,6 @@ And with that, the containerization of the CEMicro application is complete. Now 
 
 \section{Interfacing with the monolith development team}
 
-\begin{itemize}
-  \item \done{Changes to Docify}
-\end{itemize}
-
 Interfacing with the rest of the team was probably my most significant challenge in this task. Robin, my mentor, went to great length to make sure I had everything I needed and was taken care of. But even his endeavors can only go so far. In the end, I was part of my CEMicro team of one, only talking now and then with others from POS when necessary. This situation, of course, is particular to my position as a bachelor student with a project that only lasts four months, and yet, some lessons can be learned from it.
 
 When extracting a microservice, as with any other software development, make sure there is a regular exchange of all the key parties involved. Don't only bring in the main stakeholder at the end of the project, as was the case with my project. Chances are once the boundaries are specified and understood, the team would want to simplify concepts that grew in complexity over the years. Take this chance, simplifying software is always a worthwhile endeavor.
@@ -227,10 +190,6 @@ In the end, I did work with the team responsible for Docify. I tried to understa
 
 
 \section{Documentation of CEMicro}
-
-\begin{itemize}
-  \item \done{Providing a foundation for others to build on (Confluence, Readme, Thesis)}
-\end{itemize}
 
 Documentation is a point not particular to microservices but probably of more importance here. Any application needs proper documentation, so new developers can hit the ground running. When using a microservice architecture, it is even more likely that programmers need to make changes that have never worked on the service before. This thesis is one way of documenting CEMicro and should work as a reference for others. More important, however, is to leave proper breadcrumbs where others would expect them.
 

@@ -66,14 +66,6 @@ In the end, the client liked what business value Docify had to offer and was wil
 
 \section{Goals of the CEMicro Service}
 
-\begin{itemize}
-  \item \done{What is the microservice supposed to do}
-  \item \done{High-Level Overview of Illustration}
-  \item \done{The complexity of POS / CE Properties}
-  \item \done{Out of scope: Access control}
-\end{itemize}
-
-
 As already noted in the previous segment, the idea of a microservice for document creation is pretty straightforward since the API is well defined from the get-go. The printable document handling in POS, however, has three parts. Besides template and dynamic values, which are different on a per offer basis, it defines a number of static values inside the templates, which are called ``configurable elements.'' The idea behind configurable values, or CEs in short, is, that they are the same on every printout, but can be defined according to a number of factors like the current language if the paper is branded or blank if a new or used car is sold and so on.
 
 The next segment will go into more detail what complexity was actually hidden behind the rather primitive looking CEs but suffice to say at this point, the setting of these static values for a printable template is cumbersome and complicated by nature.
@@ -106,13 +98,6 @@ Another vital part of an application that was neglected is testing, both unit, a
 
 \section{Understanding the existing feature}
 \label{sec:arch:understanding}
-
-\begin{itemize}
-  \item \done{What is a configurable element?}
-  \item \done{What properties does a CE have?}
-  \item \done{Challenge: Understanding the task}
-  \item \done{Challange/Example: Devs didn't know that CEs are not unique per template}
-\end{itemize}
 
 After defining what the microservice needs to accomplish and in what context it lives comes the next step in accurately understanding what functionality the new microservice needs to offer. Since we are extracting a microservice from an existing application, we are also extracting a specific feature set that users have been using and are used to.
 
@@ -219,10 +204,6 @@ From the get-go, I developed CEMicro in a way that it can later run inside Docke
 
 
 \section{Designing the User Interface}
-
-\begin{itemize}
-  \item \done{How can the complexity of CEs be exposed more straightforwardly?}
-\end{itemize}
 
 The user interface doesn't just serve an aesthetic purpose; it helps the user to understand and manage the complexity of a system. Figure \ref{fig:pos} on page \pageref{fig:pos} and figure \ref{fig:ce-properties} on page \pageref{fig:ce-properties} show glimpses of the existing user interface in POS. The existing interface is functional but clunky and hard to use. For example, it is not immediately apparent that the validity date of a CE can be changed and how to do it. It is also difficult to understand which of the CE items is active under which circumstances.
 

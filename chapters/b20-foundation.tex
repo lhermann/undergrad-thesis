@@ -27,11 +27,6 @@ The term ``monolith'' describing an extensive system derives from the Unix commu
 \section{What is a microservice?}
 \label{sec:theory:what}
 
-\begin{itemize}
-  \item \done{General definition and how it works}
-  \item \done{Get some ideas from the it-innovations article ...}
-\end{itemize}
-
 A microservice has four characteristics that set it apart from monoliths. They are independently deployable while monoliths can only be deployed as one blcok. Microservices are organized around business capabilities avoiding the problem of ``logic everywhere'' ~\cite{microservices.2014}. Each service is governed independently simplyfing development but increasing operations overhead. And their data management is decentralized, which poses a challenge compared to monoliths.
 
 \subsection{Independently Deployable Services}
@@ -93,13 +88,6 @@ Decentralized data management is the main reason why microservice architectures 
 \section{Why are microservices currently interesting?}
 \label{sec:theory:interesting}
 
-\begin{itemize}
-  \item \done{Application development until now with monoliths \& waterfall}
-  \item \done{Avarage life and maintenance effort of a big application}
-  \item \done{Rise of Agile, the Cloud and quick deployment cycles}
-  \item \done{Rise of Software as a Service (SaaS), hiding complexity behind an API ~\cite[p.~359]{melzer.2010}}
-\end{itemize}
-
 Up until recently, building software worked like building a house. A team made a plan for the finished application, then developed it and then it was finished. The industry calls this the waterfall method, finishing all the plans before starting development. The finished software was one piece, and it was also sold as such. However, software is very different from real-world construction in that our digital systems became more and more complex. This complexity meant that it was necessary to keep software up to date. It meant that companies still needed to extend a finished software product by additional functions and actively maintain it. Surprisingly little thought went into the length of the life of an application, probably because the field of software development was comparatively new, and nobody knew where the journey would lead.
 
 An excellent example of this was the fear around the Y2K bug. The only reason for the bug was that developers hadn't considered that people would use their product for so long. Today we can look back in hindsight, knowing that it is not uncommon for software to live over ten or even 20 years. Especially industry applications see long years of life.
@@ -131,12 +119,6 @@ Once we reach this point, it is easy to connect the dots from third-party SaaS p
 %%
 \section{Which problem does a microservice solve?}
 \label{sec:theory:what-problem}
-
-\begin{itemize}
-  \item \done{Why is a microservice better than a monolith?}
-  \item \done{Advantages \& Disadvantages of microservices}
-  \item \done{Work/Effort of microservice compared to monolith}
-\end{itemize}
 
 Microservice architecture is the answer to the question of scalability and quick deploy cycles, which are becoming ever more critical in today's world of cloud computing. While solving these two primary concerns, it also helps with clear separation of concerns and free choice of technology and speeds up development. However, these gains come at the cost of more sophisticated infrastructure and more significant operations overhead.
 
@@ -196,11 +178,6 @@ There is but one catch, in the real world product managers don't like to employ 
 %%
 \section{Challenges of implementing a microservice}
 
-\begin{itemize}
-  \item \done{Complexity of ecosystem}
-  \item \done{Design challenge because often monolith software is old and overcomplicated.}
-\end{itemize}
-
 There are three main challenges with the architectural style of microservices that require the developer to rethink some design decisions. The data is distributed, so the developer has to deal with eventual consistency. Communication between services is expensive, which requires more discipline and less greediness when requesting data. And the increased complexity of the infrastructure requires more resources in operations.
 
 
@@ -259,11 +236,6 @@ Each service is deployed individually and requires its deployment pipeline, stag
 %% How to extract a microservice from an existing application?
 %%
 \section{How to extract a microservice from an existing application?}
-
-\begin{itemize}
-  \item \done{How to make a cut in a big application (monolith)}
-\end{itemize}
-
 
 \subsection{Justify Business Value}
 
