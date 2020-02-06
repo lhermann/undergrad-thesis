@@ -86,7 +86,7 @@ I decided to call the service CEMicro, short for Configurable Element Microservi
 
 Early in the planning of the application context, that is, with whom the new application needs to communicate about what, I assumed that CEMicro only needs to talk to the POS system since, in the end, only the POS system will request a dataset from CEMicro. But after understanding that the templates are actually not available to POS but rather maintained by Docify, it became clear to me that either CEMicro has to have its own copy of each template or it needs to request the template from Docify in order to know which configurable elements the template requires. Another option would have been for users to tell CEMicro which configurable elements exist and are part of which template, but this would have meant a double effort for users since each new CE that was defined inside a template in Docify needs to be additionally added to CEMicro, which brings us to the concept of the single source of truth.
 
-The single source of truth \todo{[ref]} is a fundamental concept in programming that value or variable should only be defined and maintained in one place, the source of truth. As soon as they are set in multiple locations, there has to be a system to keep each other synchronized; otherwise, the application state will be inconsistent. The single source of truth principle thus becomes even more critical for a distributed service architecture. In a monolith application, and this is really the reason why monoliths are more comfortable to develop and more widely used, there is usually only one database, and the whole application has access to all the data. But in a distributed service architecture, every individual service only has its own database. In order to make this work, each service can only handle the data of its particular domain and has to request the data of other services through their public interfaces. In the case of CEMicro, the database can only contain the data of the actual configurable elements and not the data of the templates, or the user table for that matter. If copies of a dataset existed in the databases of multiple services, there would need to be a mechanism to keep all these copies in sync. This can be done through a publish-subscriber pattern \todo{[ref]}, but if the availability of the network can not be guaranteed, and the first rule of a network is that its availability can not be guaranteed, then the data can become inconsistent between copies. And with computer systems where millions of daily requests are no rarity, the rule that what can happen will happen is pretty much a given.
+The single source of truth ~\cite{ssot.wiki} is a fundamental concept in programming that value or variable should only be defined and maintained in one place, the source of truth. As soon as they are set in multiple locations, there has to be a system to keep each other synchronized; otherwise, the application state will be inconsistent. The single source of truth principle thus becomes even more critical for a distributed service architecture. In a monolith application, and this is really the reason why monoliths are more comfortable to develop and more widely used, there is usually only one database, and the whole application has access to all the data. But in a distributed service architecture, every individual service only has its own database. In order to make this work, each service can only handle the data of its particular domain and has to request the data of other services through their public interfaces. In the case of CEMicro, the database can only contain the data of the actual configurable elements and not the data of the templates, or the user table for that matter. If copies of a dataset existed in the databases of multiple services, there would need to be a mechanism to keep all these copies in sync. This can be done through a publish-subscriber pattern ~\cite{publish-subscribe.wiki}, but if the availability of the network can not be guaranteed, and the first rule of a network is that its availability can not be guaranteed, then the data can become inconsistent between copies. And with computer systems where millions of daily requests are no rarity, the rule that what can happen will happen is pretty much a given.
 
 It was therefore decided to include both POS and Docify in the new services context. If a user wants to manage the configurable elements of a template CEMicro will request the list of available template and then the individual template from Docify, scan it for all the placeholders which will be replaced with CE values and add a database entry for each value with a unique composite index that is comprised of the template name and the market. The user can then edit each individual configurable element, which is directly persisted in CEMicro's own database. POS can then request the list of configurable element values by the unique template name and market pair. Figure \ref{fig:context} shows the public interfaces of the CEMicro service, its related third-party applications, and its own three-layer structure of a database, server, and client.
 
@@ -129,8 +129,7 @@ An excellent example of this is Windows 8, where Microsoft decided to change the
     \includegraphics[width=\linewidth]{assets/windows-8-hot-corner.jpg}
     \caption{Windows 8 new hot corner}
   \end{subfigure}
-  \caption{Windows 8 start menu UI change}
-  \source{https://www.howtogeek.com/107662/how-to-live-without-the-start-button-in-windows-8/}
+  \caption[Windows 8 start menu UI before and after]{Windows 8 start menu UI change ~\cite{hoffman.2012}}
   \label{fig:win8}
 \end{figure}
 
@@ -197,8 +196,7 @@ The client is made up of a markup language HTML for the browser together with CS
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\linewidth]{assets/caniuse-promises.png}
-  \caption{Browser support for JavaScript Promises}
-  \source{https://caniuse.com/\#feat=promises}
+  \caption[Browser support for JavaScript Promises]{Browser support for JavaScript Promises ~\cite{caniuse.2020}}
   \label{fig:caniuse-promises}
 \end{figure}
 
@@ -207,8 +205,7 @@ Developers often build a software project on top of a library or framework that 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\linewidth]{assets/frontend-framework-usage.png}
-  \caption{Usage statistics of current front end frameworks}
-  \source{https://2019.stateofjs.com/front-end-frameworks/}
+  \caption[Usage statistics of current front end frameworks]{Usage statistics of current front end frameworks ~\cite{stateofjs.2019}}
   \label{fig:frontend-framework-usage}
 \end{figure}
 

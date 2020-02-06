@@ -78,8 +78,7 @@ Decentralized data management is likely the single biggest challenge with servic
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=0.7\linewidth]{assets/decentralised-data.png}
-  \caption{Data management of monoliths and microservices}
-  \source{https://www.martinfowler.com/articles/microservices.html}
+  \caption[Data management of monoliths and microservices]{Data management of monoliths and microservices ~\cite{microservices.2014}}
   \label{fig:decentralised-data}
 \end{figure}
 
@@ -120,7 +119,7 @@ Before we come to the topic of microservices, we want to look at one more innova
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\linewidth]{assets/mailchimp-brand.png}
-  \source{https://mailchimp.com/about/brand-assets/}
+  \caption[Mailchimp Brand]{Mailchimp Brand ~\cite{mailchimp.2020}}
 \end{figure}
 
 Once we reach this point, it is easy to connect the dots from third-party SaaS products to an individual application itself running as a cluster of services. In the end, the appeal for companies to break up monolith systems into service-oriented architectures lies in the idea of hiding the complexity of software behind an API\footnote{Application Processing Interface – a way to tell a service to do a specific task or request particular set of data} and looking at it as a business process ~\cite[p.~359]{melzer.2010}. A microservice essentially becomes a black box. The development team takes care that the service works and is at liberty to decide how to solve problems. To everyone else, the service represents an API that they can use to solve their issues.
@@ -170,8 +169,7 @@ Scaling an application is becoming a bigger requirement in today's world, where 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.4\linewidth]{assets/netflix-architecture.png}
-  \caption{The Netflix architecture; suffice to say, it uses a lot of services}
-  \source{https://netflixtechblog.com/system-architectures-for-personalization-and-recommendation-e081aa94b5d8}
+  \caption[The Netflix architecture]{The Netflix architecture; suffice to say, it uses a lot of services ~\cite{netflix.2013}}
   \label{fix:netflix-architecture}
 \end{figure}
 
@@ -224,8 +222,7 @@ If services need to be scaled up and their databases duplicated then developers 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.70\linewidth]{assets/youtube-view-counter.png}
-  \caption{The YouTube view counter is an example for eventual consistency because of service oriented architecture}
-  \source{https://www.youtube.com/watch?v=RY_2gElt3SA}
+  \caption[The YouTube view counter as an example for eventual consistency]{The YouTube view counter is an example for eventual consistency because of service oriented architecture}
 \end{figure}
 
 A great example is the YouTube view counter. It is essential for YouTube to have a correct view count because it is essentially their internal currency and used to calculate advertisement revenue. But views occur in different countries all accross the world hitting many different servers. So the number off views each user sees can be different depending on the particular server they requested and the moment in time. But eventually all counts are tallied up and one authoritative number is calculated
@@ -256,20 +253,6 @@ Each service is deployed individually and requires its deployment pipeline, stag
   \includegraphics[width=0.25\linewidth]{assets/illustration-microservice-stack.png}
   \caption{Microservice architecutres require a mature ops team}
 \end{figure}
-
-
-
-%%
-%% When does a microservice make sense?
-%%
-% \section{When does a microservice make sense?}
-
-% \begin{itemize}
-%   \item \todo{What type of application are microservices best suited for? (Scallable, defined scope)}
-%   \item \todo{Good size of a team for a microservice}
-%   \item \todo{When not to use distributed service architecture}
-% \end{itemize}
-
 
 
 %%
